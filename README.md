@@ -8,9 +8,7 @@ fusion protein is then photoconverted, and the decrease in fluorescence intensit
 monitored. The resulting intensity data is fitted with a decay function, and half-lives can be
 calculated from the fits.
 
-
-
-<img style="float: right;" width=300px src="pyfdap/logo/pyfdap_icon.png"/>
+<img align= "right" width=300px src="pyfdap/logo/pyfdap_icon.png"/>
 
 Both intracellular and extracellular protein half-lives can be determined using FDAP. A static
 intracellular signal (e.g. Alexa488-dextran) can be used to create an intracellular mask, such
