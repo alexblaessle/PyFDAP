@@ -89,8 +89,8 @@ If you use PyFDAP for your research, please cite the original publication:
 
 ### Major Changes:
 - Changed the way average fits are computed:
-  -> Data is now pooled in time bins
-  -> Average fit is newly computed and is a fit to average data, instead previously an average of the fits.
+	* Data is now pooled in time bins
+	* Average fit is newly computed and is a fit to average data, instead previously an average of the fits.
 - PyFDAP automatically imports useful_fcts as uf into terminal
 - PyFDAP is now a python packages (has __init__.py and setup.py)
 - Added constrained Nelder-Mead algorithm.
@@ -117,7 +117,7 @@ If you use PyFDAP for your research, please cite the original publication:
 - Added shortcut to copy and paste quickly any objects.
 - Added plot extrapolated fit function. Plots extrapolated fits from (0,tend) and highlights c0, y0 and tau.
 
-#Minor Additions:
+### Minor Additions:
 - Added plot all ext/int/slice data. Plots all data + background datasets in one single plot.
 - Now fit object keeps track of number of iterations and function calls during fitting.
 - fit object now has print_results().
@@ -130,7 +130,7 @@ If you use PyFDAP for your research, please cite the original publication:
 - Added option to launch PyFDAP GUI and not redirect terminal stout/sterr to PyFDAP terminal
 - Added option to launch PyFDAP GUI and ignore warning messages for FutureWarning and DeprecatedWarning
 
-#Bugfixes: 
+### Bugfixes: 
 - Fixed Bug where analyze all datasets resulted in error if dataset had no background dataset.
 - Fixed some unnecessary print outs.
 - Fixed save dialog to show .pk files and also autocomplete filename.
