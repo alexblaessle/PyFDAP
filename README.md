@@ -2,7 +2,7 @@
 
 PyFDAP is a Python-based analysis framework for Fluorescence Decay After Photoconversion (FDAP) experiments. 
 
-<img style="float: right;" src="pyfdap/pyfdap_icon.png">
+<img style="float: right;" src="pyfdap/logo/pyfdap_icon.png">
 
 FDAP is a microscopy-based technique for mea-suring protein half-lives. In FDAP experiments, a protein of interest
 is tagged with a photoconvertible fluorescent protein and expressed in vivo. The fluorescent
