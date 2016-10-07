@@ -4,10 +4,13 @@ old_versions/
 pyfdap_v1.0/
 Website/
 Website_backup/
+Requests/
+executables/
 
 #Don't push backup and TestDataset
 pyfdap/TestDataset/
 pyfdap/backup/
+pyfdap/scripts/
 
 #Don't push compiled python modules
 *.pyc
@@ -27,4 +30,7 @@ pyfdap/logo/
 
 #Don't push pickle file
 *.pk
+
+#Don't push change_log
+change_log
 

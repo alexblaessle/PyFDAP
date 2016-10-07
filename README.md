@@ -100,7 +100,7 @@ If you use PyFDAP for your research, please cite the original publication:
 
 ### Major Additions:
 - Added mutliple statistical tests:
-	* Shirapo
+	* Shapiro-Wilk
 	* t-test
 	* Welch's t-test
 	* Wilcoxon

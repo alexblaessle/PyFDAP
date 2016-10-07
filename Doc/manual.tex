@@ -489,6 +489,12 @@ You can also plot the averaged time-dependent fluorescence decay data as error b
 
 \noindent Mathematical details for error bar computation and data normalization can be found in Section \ref{sec:stats}.
 
+Since Version 1.1 PyFDAP also includes statistical tests for comparison between different samples and a normality test. To compare two samples, load two different molecule files, then select the test you want
+to perform via \textit{Statistics $\rightarrow$ Tests}. Select the two molecules you want to compare and click \textit{Done}. The test statistic will then be displayed in the terminal window. Note: Both molecules 
+need to be averaged before via  \textit{Statistics $\rightarrow$ Average molecule}. More details about the implemented statistical tests can be found in Section \ref{sec:statstest}
+
+
+
 \subsection{Saving results from PyFDAP}
 \label{sec:output}
 PyFDAP offers multiple ways to save and share FDAP project data and details such as plots, videos, analysis settings, and whole molecule projects. 
@@ -749,6 +755,39 @@ PyFDAP can produce different error bar plots for each averaged region. Clicking 
 \end{equation*}
 
 \noindent where $\tilde{c_i}(t_j)$ is the normalized data point at time $t_j$. This normalization facilitates the comparison of decay curve shapes, but it substantially changes the meaning of the error bars. Since all data series are pinned to a value of $1$ at their first time point, the standard deviation vanishes for this data point. The following data points will generally produce increasing error bars since the decay curves generally diverge. The length of the normalized error bars can be interpreted as the extent to which the decay curves diverge throughout the experiments.
+
+\subsubsection{Statistical tests}
+\label{sec:statstest}
+
+PyFDAP offers multiple statistical tests both to 
+\begin{itemize}
+ \item test the normality of the distribution of degradation constants,
+ \item and compare two different molecule files and determine of the resulting degradation constants are significantly different. 
+\end{itemize}
+
+A multitude of statistical tests such as the Students t-test \citep{Student1908} require normally distributed samples. One way to test this is using the Shapiro-Wilk test \citep{Shapiro1965}, which was recently
+found to have the best sensibility compared to other common normality tests \citep{Razali2011}.\\
+
+PyFDAP offers four methods to compare the degradation of two molecules. All methods are summarized in table \ref{tab:stats}.
+
+\begin{table}
+ \small
+  \centering
+ \begin{tabular}{p{4cm}|c|p{4cm}}
+\textbf{Method} & \textbf{Requires normality} & \textbf{Reference} \\
+\hhline{=|=|=}
+\raggedright Standard t-test &\centering Yes & \cite{Student1908} \\
+ \hline
+\raggedright Welch's t-test &\centering Yes & \cite{Welch1947} \\
+  \hline
+\raggedright Mann-Whitney U Test  &\centering  No & \cite{MannWhitney1947} \\
+ \hline
+\raggedright Wilcoxon &\centering No & \cite{Wilcoxon1945} \\
+ \hline
+ \end{tabular}
+\caption{List of statistical comparison methods in PyFDAP.}
+\label{tab:stats}
+\end{table}
 
 \section{Acknowledgments}
 We thank Katherine Rogers and Gary Soh for useful suggestions and for testing PyFDAP. We thank Katherine Rogers and Alex Schier for providing the test dataset.

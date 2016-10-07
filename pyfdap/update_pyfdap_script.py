@@ -1,7 +1,7 @@
 import os
 
 #Settings
-version="1.0"
+version="1.1"
 target_dir="/home/alex_loc/Documents/Research/PyFDAP/pyfdap_v"+version
 
 #Making necessary folders 
@@ -19,7 +19,7 @@ except OSError:
 	pass
 	
 file_list=["pyfdap_app.py","pyfdap_img_module.py","pyfdap_misc_module.py","pyfdap_fit_module.py","pyfdap_misc_module.py",
-	   "pyfdap_stats_module.py","embryo.py","molecule.py","pyfdap_subwin.py","pyfdap_term.py","pyfdap_conf.py","Doc/manual.pdf","TestDataset/results/TestDataset_20min.pk"]
+	   "pyfdap_stats_module.py","embryo.py","molecule.py","pyfdap_subwin.py","pyfdap_term.py","pyfdap_conf.py","Doc/manual.pdf","TestDataset/results/TestDataset_20min.pk","__init__.py"]
 
 folder_list=["TestDataset/squint-background_20min-interval","TestDataset/squint-dendra2_20min-interval"]
 

@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: manual.aux
+The style file: natbib.bst
+Database file #1: Blaessle_PyFDAP.bib
+Warning--empty journal in Razali2011
+Warning--there's a number but no volume in Welch1947
+You've used 21 entries,
+            2378 wiz_defined-function locations,
+            675 strings with 7294 characters,
+and the built_in function-call counts, 9320 in all, are:
+= -- 954
+> -- 418
+< -- 17
++ -- 132
+- -- 118
+* -- 800
+:= -- 1624
+add.period$ -- 88
+call.type$ -- 21
+change.case$ -- 133
+chr.to.int$ -- 21
+cite$ -- 23
+duplicate$ -- 380
+empty$ -- 629
+format.name$ -- 153
+if$ -- 1833
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 22
+newline$ -- 108
+num.names$ -- 84
+pop$ -- 113
+preamble$ -- 1
+purify$ -- 133
+quote$ -- 0
+skip$ -- 265
+stack$ -- 0
+substring$ -- 634
+swap$ -- 61
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 186
+warning$ -- 2
+while$ -- 93
+width$ -- 0
+write$ -- 273
+(There were 2 warnings)

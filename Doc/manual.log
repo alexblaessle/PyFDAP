@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.12.16)  31 JUL 2015 11:41
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.12.16)  7 OCT 2016 15:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -874,17 +874,6 @@ been already used, duplicate ignored
                    \relax 
 l.58 \newpage
               [1]
-! Undefined control sequence.
-<argument> ...tring :autoref\endcsname {\@captype 
-                                                  }1
-l.74 ...an be found in Table \ref{tab:executables}
-                                                  . If there is no executabl...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <6.5> not available
 (Font)              size <6> substituted on input line 79.
@@ -952,28 +941,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 331--332
 
  []
 
-<figs/pyfdp_mainframe_rect.png, id=338, 1927.2pt x 1204.5pt>
+<figs/pyfdp_mainframe_rect.png, id=340, 1927.2pt x 1204.5pt>
 File: figs/pyfdp_mainframe_rect.png Graphic file (type png)
 
 <use figs/pyfdp_mainframe_rect.png>
 Package pdftex.def Info: figs/pyfdp_mainframe_rect.png used on input line 354.
 (pdftex.def)             Requested size: 370.9945pt x 231.87157pt.
  [8 <./figs/pyfdp_mainframe_rect.png>]
-<figs/new_molecule.png, id=359, 192.72pt x 129.48375pt>
+<figs/new_molecule.png, id=360, 192.72pt x 129.48375pt>
 File: figs/new_molecule.png Graphic file (type png)
 
 <use figs/new_molecule.png>
 Package pdftex.def Info: figs/new_molecule.png used on input line 378.
 (pdftex.def)             Requested size: 57.81644pt x 38.84541pt.
 
-<figs/new_embryo.png, id=361, 373.395pt x 231.86626pt>
+<figs/new_embryo.png, id=362, 373.395pt x 231.86626pt>
 File: figs/new_embryo.png Graphic file (type png)
 
 <use figs/new_embryo.png>
 Package pdftex.def Info: figs/new_embryo.png used on input line 387.
 (pdftex.def)             Requested size: 112.01936pt x 69.56041pt.
 
-<figs/edit_embryo.png, id=362, 1499.6025pt x 528.97626pt>
+<figs/edit_embryo.png, id=363, 1499.6025pt x 528.97626pt>
 File: figs/edit_embryo.png Graphic file (type png)
 
 <use figs/edit_embryo.png>
@@ -986,75 +975,53 @@ rst and sec-ond post-conversion
  []
 
 [9 <./figs/new_molecule.png> <./figs/new_embryo.png>]
-<figs/new_bkgd.png, id=374, 435.6275pt x 131.49126pt>
+<figs/new_bkgd.png, id=375, 435.6275pt x 131.49126pt>
 File: figs/new_bkgd.png Graphic file (type png)
  <use figs/new_bkgd.png>
 Package pdftex.def Info: figs/new_bkgd.png used on input line 410.
 (pdftex.def)             Requested size: 130.68925pt x 39.44766pt.
 
 [10 <./figs/edit_embryo.png> <./figs/new_bkgd.png>]
-<figs/analyze_mol.png, id=388, 443.6575pt x 131.49126pt>
+<figs/analyze_mol.png, id=389, 443.6575pt x 131.49126pt>
 File: figs/analyze_mol.png Graphic file (type png)
 
 <use figs/analyze_mol.png>
 Package pdftex.def Info: figs/analyze_mol.png used on input line 420.
 (pdftex.def)             Requested size: 133.09827pt x 39.44766pt.
 
-! Undefined control sequence.
-<argument> ...tring :autoref\endcsname {\@captype 
-                                                  }3
-l.428 ...on method (see Table \ref{tab:algorithms}
-                                                   for details) used for fin...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-<figs/new_fit.png, id=395, 1141.26375pt x 348.30125pt>
+<figs/new_fit.png, id=396, 1141.26375pt x 348.30125pt>
 File: figs/new_fit.png Graphic file (type png)
  <use figs/new_fit.png>
 Package pdftex.def Info: figs/new_fit.png used on input line 446.
 (pdftex.def)             Requested size: 228.2487pt x 69.65901pt.
 
-[11 <./figs/analyze_mol.png>] <figs/fit_done.png, id=412, 1927.2pt x 1204.5pt>
+[11 <./figs/analyze_mol.png>] <figs/fit_done.png, id=414, 1927.2pt x 1204.5pt>
 File: figs/fit_done.png Graphic file (type png)
 
 <use figs/fit_done.png>
 Package pdftex.def Info: figs/fit_done.png used on input line 451.
 (pdftex.def)             Requested size: 366.17181pt x 228.85738pt.
  [12 <./figs/new_fit.png> <./figs/fit_done.png>]
-<figs/sel_fits.png, id=423, 546.04pt x 526.96875pt>
+<figs/sel_fits.png, id=425, 546.04pt x 526.96875pt>
 File: figs/sel_fits.png Graphic file (type png)
  <use figs/sel_fits.png>
 Package pdftex.def Info: figs/sel_fits.png used on input line 471.
 (pdftex.def)             Requested size: 136.50966pt x 131.74185pt.
 
-<figs/all_parameters.png, id=425, 1927.2pt x 1084.05pt>
+<figs/all_parameters.png, id=427, 1927.2pt x 1084.05pt>
 File: figs/all_parameters.png Graphic file (type png)
 
 <use figs/all_parameters.png>
 Package pdftex.def Info: figs/all_parameters.png used on input line 478.
 (pdftex.def)             Requested size: 346.88104pt x 195.12057pt.
  [13 <./figs/sel_fits.png> <./figs/all_parameters.png>] <figs/error_bar.png, id
-=432, 1927.2pt x 1084.05pt>
+=434, 1927.2pt x 1084.05pt>
 File: figs/error_bar.png Graphic file (type png)
 
 <use figs/error_bar.png>
 Package pdftex.def Info: figs/error_bar.png used on input line 487.
 (pdftex.def)             Requested size: 346.88104pt x 195.12057pt.
  [14 <./figs/error_bar.png>]
-! Undefined control sequence.
-<argument> ...tring :autoref\endcsname {\@captype 
-                                                  }1
-l.518 ...ta navigation (Figure~\ref{fig:structure}
-                                                  ).
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 Package epstopdf Info: Source file: <figs/Blaessle_Figure1.eps>
 (epstopdf)                    date: 2014-11-13 22:55:29
 (epstopdf)                    size: 670766 bytes
@@ -1064,22 +1031,18 @@ Package epstopdf Info: Source file: <figs/Blaessle_Figure1.eps>
 (epstopdf)                    size: 20037 bytes
 (epstopdf)             Command: <repstopdf --outfile=figs/Blaessle_Figure1-eps-
 converted-to.pdf figs/Blaessle_Figure1.eps>
-(epstopdf)             \includegraphics on input line 522.
+(epstopdf)             \includegraphics on input line 528.
 Package epstopdf Info: Output file is already uptodate.
-<figs/Blaessle_Figure1-eps-converted-to.pdf, id=442, 260.975pt x 239.89626pt>
+
+<figs/Blaessle_Figure1-eps-converted-to.pdf, id=445, 260.975pt x 239.89626pt>
 File: figs/Blaessle_Figure1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figs/Blaessle_Figure1-eps-converted-to.pdf>
 Package pdftex.def Info: figs/Blaessle_Figure1-eps-converted-to.pdf used on inp
-ut line 522.
+ut line 528.
 (pdftex.def)             Requested size: 260.97437pt x 239.89566pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 527--528
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 529--530
+Underfull \hbox (badness 10000) in paragraph at lines 533--534
 
  []
 
@@ -1088,137 +1051,121 @@ Underfull \hbox (badness 10000) in paragraph at lines 529--530
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.530 
+l.534 
        <./figs/Blaessle_Figure1-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 531--532
+Underfull \hbox (badness 10000) in paragraph at lines 535--536
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 533--534
+Underfull \hbox (badness 10000) in paragraph at lines 537--538
 
  []
 
-! Undefined control sequence.
-<argument> ...tring :autoref\endcsname {\@captype 
-                                                  }2
-l.548 ... tests are listed in Table~\ref{tab:time}
-                                                  .
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+
+Underfull \hbox (badness 10000) in paragraph at lines 539--540
+
+ []
 
 [16pdfTeX warning (ext4): destination with the same identifier (name{table.2}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.576 
-      ]
-Underfull \hbox (badness 10000) in paragraph at lines 605--606
+l.578 \begin{equation*}
+                       ]
+Underfull \hbox (badness 10000) in paragraph at lines 611--612
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 613--614
+Underfull \hbox (badness 10000) in paragraph at lines 619--620
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 615--616
+Underfull \hbox (badness 10000) in paragraph at lines 621--622
 
  []
 
-[17]
-! Undefined control sequence.
-<argument> ...tring :autoref\endcsname {\@captype 
-                                                  }3
-l.660 ...an be found in Table \ref{tab:algorithms}
-                                                  .
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Underfull \hbox (badness 3179) in paragraph at lines 683--684
+[17] [18]
+Underfull \hbox (badness 3179) in paragraph at lines 689--690
 [][]\OT1/cmr/m/n/9 Broyden[] ([]1970[]); []Gold-farb[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 683--684
+Underfull \hbox (badness 10000) in paragraph at lines 689--690
 \OT1/cmr/m/n/9 ([]1970[]); []Fletcher[] ([]1970[]);
  []
 
-[18] [19pdfTeX warning (ext4): destination with the same identifier (name{table
-.3}) has been already used, duplicate ignored
+[19pdfTeX warning (ext4): destination with the same identifier (name{table.3}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.735 \end{equation}
-                    ] [20] [21] (./manual.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 809.
- [22]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 809.
+l.727 \end{equation}
+                    ]
+Underfull \hbox (badness 10000) in paragraph at lines 768--770
+
+ []
+
+[20] [21pdfTeX warning (ext4): destination with the same identifier (name{table
+.4}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.796 
+      ] [22] (./manual.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 848.
+ [23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 848.
  (./manual.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 809.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 809.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 848.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 848.
 Package rerunfilecheck Info: File `manual.out' has not changed.
-(rerunfilecheck)             Checksum: 0338F4D01428BFB941954E451FA2B077;2290.
+(rerunfilecheck)             Checksum: 6248C1C72C957D2CDC7D061035BE84AC;2367.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.26pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 809.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 848.
  ) 
 Here is how much of TeX's memory you used:
- 16867 strings out of 494976
- 283726 string characters out of 6179136
- 415709 words of memory out of 5000000
- 19575 multiletter control sequences out of 15000+600000
+ 16881 strings out of 494976
+ 283942 string characters out of 6179136
+ 413577 words of memory out of 5000000
+ 19582 multiletter control sequences out of 15000+600000
  15405 words of font info for 50 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  56i,11n,55p,1079b,1934s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{subsubsection.1} has been referenced but does not
- exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.1} has been referenced but does not exis
-t, replaced by a fixed one
-
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-i5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb>
-Output written on manual.pdf (23 pages, 1551975 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb>
+Output written on manual.pdf (24 pages, 1557336 bytes).
 PDF statistics:
- 694 PDF objects out of 1000 (max. 8388607)
- 617 compressed objects within 7 object streams
- 199 named destinations out of 1000 (max. 500000)
- 313 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 723 PDF objects out of 1000 (max. 8388607)
+ 645 compressed objects within 7 object streams
+ 206 named destinations out of 1000 (max. 500000)
+ 321 words of extra memory for PDF output out of 10000 (max. 10000000)
 

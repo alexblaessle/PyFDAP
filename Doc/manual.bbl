@@ -32,6 +32,12 @@ Kraft, D. (1988).
 \newblock A software package for sequential quadratic programming.
 \newblock {\em DFVLR-FB 88-28, K\"oln, Germany\/}.
 
+\bibitem[Mann and Whitney(1947)Mann and Whitney]{MannWhitney1947}
+Mann, H. and Whitney, D. (1947).
+\newblock {On a test of whether one of two random variables is stochastically
+  larger than the other}.
+\newblock {\em The annals of mathematical statistics\/}.
+
 \bibitem[Millman and Aivazis(2011)Millman and Aivazis]{Millman2011}
 Millman, K.~J. and Aivazis, M. (2011).
 \newblock Python for scientists and engineers.
@@ -72,6 +78,12 @@ Polak, E. and Ribi\`{e}re, G. (1969).
 \newblock {\em Revue Fran\c{c}aise d'Informatique et de Recherche
   Op\'{e}rationnelle\/}, {\bf 16}, 35--43.
 
+\bibitem[Razali and Wah(2011)Razali and Wah]{Razali2011}
+Razali, N.~M. and Wah, Y.~B. (2011).
+\newblock {Power comparisons of Shapiro-Wilk, Kolmogorov-Smirnov, Lilliefors
+  and Anderson-Darling tests}.
+\newblock {\bf 2}, 21--33.
+
 \bibitem[Rogers {\em et~al.}(2014)Rogers, Bl\"a{\ss}le, Schier, and
   M\"uller]{Rogers2014}
 Rogers, K.~W., Bl\"a{\ss}le, A., Schier, A.~F., and M\"uller, P. (2014).
@@ -83,5 +95,26 @@ Rogers, K.~W., Bl\"a{\ss}le, A., Schier, A.~F., and M\"uller, P. (2014).
 Shanno, D.~F. (1970).
 \newblock Conditioning of quasi-{N}ewton methods for function minimization.
 \newblock {\em Mathematics of Computation\/}, {\bf 24}(111), 647--656.
+
+\bibitem[Shapiro and Wilk(1965)Shapiro and Wilk]{Shapiro1965}
+Shapiro, S. and Wilk, M. (1965).
+\newblock {An analysis of variance test for normality (complete samples)}.
+\newblock {\em Biometrika\/}, {\bf 52}, 591--611.
+
+\bibitem[Student(1908)Student]{Student1908}
+Student (1908).
+\newblock {The probable error of a mean}.
+\newblock {\em Biometrika\/}, {\bf 6}, 1--25.
+
+\bibitem[Welch(1947)Welch]{Welch1947}
+Welch, B. (1947).
+\newblock {The generalization ofstudent's' problem when several different
+  population variances are involved}.
+\newblock {\em Biometrika\/}, (2).
+
+\bibitem[Wilcoxon(1945)Wilcoxon]{Wilcoxon1945}
+Wilcoxon, F. (1945).
+\newblock {Individual comparisons by ranking methods}.
+\newblock {\em Biometrics bulletin\/}, {\bf 1}, 80--83.
 
 \end{thebibliography}

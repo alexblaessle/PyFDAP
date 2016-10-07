@@ -1,0 +1,35 @@
+#Major changes
+- Added copy/paste embryo feature. Now can also copy embryo objects between molecule objects.
+- Added copy/paste background feature. Now can also copy background objects between molecule objects.
+
+
+
+- Fixed Bug where analyze all datasets resulted in error if dataset had no background dataset.
+- Fixed some unnecessary print outs.
+- Fixed save dialog to show .pk files and also autocomplete filename.
+- Added plot extrapolated fit function. Plots extrapolated fits from (0,tend) and highlights c0, y0 and tau.
+- Added plot all ext/int/slice data. Plots all data + background datasets in one single plot.
+
+- Added shortcut to copy and paste quickly any objects.
+- Changed the way some data is getting backuped before saving a molecule or an embryo to increase performance and find a workaround to memory overloads.
+- Fixed a bug in copy_fit where fit.fit_number was getting assigned in the wrong way. 
+- Now fit object keeps track of number of iterations and function calls during fitting.
+- fit object now has print_results().
+- Added constrained Nelder-Mead algorithm.
+- Added I_pre as a option for x0_y0.
+- Added auto completion for pre folder dialog.
+- Added functions get_max_int_pxs, label_pxs to create range indicator masks .
+- Added range indicator to dataset_dialog.
+- Added two new export functions: Export selected object to csv and export selected fits to csv.
+- Added the option to also ignore frames from background datasets
+- PyFDAP automatically imports useful_fcts as uf into terminal
+- Changed the way average
+- Added threshhold selector for better threshhold selection
+- Added function that checks if objects (molecule,embryo,fits,...) are of newest version and adds latest properties to object if not yet present
+- Added option for different threshholding algorithms (fixed,otsu,adaptive)
+- Added option to fill values outside of embryo with nan to become better histogram and improve threshholding performance
+
+
+
+
+ 

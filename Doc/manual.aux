@@ -50,21 +50,21 @@
 \newlabel{sec:output}{{{3.4}}{14}{Saving results from PyFDAP}{subsection.3.4}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {{{3.4}.1}}Saving figures and movies}{14}{subsubsection.3.4.1}}
 \newlabel{sec:movie}{{{{3.4}.1}}{14}{Saving figures and movies}{subsubsection.3.4.1}{}}
-\citation{Otsu1979}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {{{3.4}.2}}Saving molecule and embryo files}{15}{subsubsection.3.4.2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {{{3.4}.3}}Saving plots and results as .csv files}{15}{subsubsection.3.4.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Data structure}{15}{section.4}}
 \newlabel{sec:structure}{{4}{15}{Data structure}{section.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Hierarchical PyFDAP data structure for FDAP experiments. Experiments are grouped into a main molecule project and divided into FDAP (1 to m) and background (1 to b) pre- and post-conversion measurements. Each FDAP measurement can have multiple fits (1 to f) with different fitting options.}}{15}{figure.1}}
 \newlabel{fig:structure}{{1}{15}{Hierarchical PyFDAP data structure for FDAP experiments. Experiments are grouped into a main molecule project and divided into FDAP (1 to m) and background (1 to b) pre- and post-conversion measurements. Each FDAP measurement can have multiple fits (1 to f) with different fitting options}{figure.1}{}}
+\citation{Otsu1979}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Performance}{16}{section.5}}
 \newlabel{sec:performance}{{5}{16}{Performance}{section.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Performance test results of PyFDAP.}}{16}{table.2}}
 \newlabel{tab:time}{{2}{16}{Performance test results of PyFDAP}{table.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Mathematical background}{16}{section.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {{6.1}}Decay models}{16}{subsection.6.1}}
-\newlabel{sec:models}{{{6.1}}{16}{Decay models}{subsection.6.1}{}}
 \citation{Eldar2003}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Mathematical background}{17}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{6.1}}Decay models}{17}{subsection.6.1}}
+\newlabel{sec:models}{{{6.1}}{17}{Decay models}{subsection.6.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{6.2}}Estimation of initial guesses and bounds for variables}{17}{subsection.6.2}}
 \newlabel{sec:bounds}{{{6.2}}{17}{Estimation of initial guesses and bounds for variables}{subsection.6.2}{}}
 \citation{Mueller2012}
@@ -87,18 +87,29 @@
 \citation{Fletcher1970}
 \citation{Shanno1970}
 \citation{Polak1969}
-\@writefile{toc}{\contentsline {subsection}{\numberline {{6.3}}Optimization algorithms}{18}{subsection.6.3}}
-\newlabel{sec:algorithms}{{{6.3}}{18}{Optimization algorithms}{subsection.6.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces List of optimization algorithms in PyFDAP.}}{19}{table.3}}
 \newlabel{tab:algorithms}{{3}{19}{List of optimization algorithms in PyFDAP}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {{6.3}}Optimization algorithms}{19}{subsection.6.3}}
+\newlabel{sec:algorithms}{{{6.3}}{19}{Optimization algorithms}{subsection.6.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {{6.4}}Statistics}{19}{subsection.6.4}}
 \newlabel{sec:stats}{{{6.4}}{19}{Statistics}{subsection.6.4}{}}
 \newlabel{equ:lin_1}{{1}{19}{Statistics}{equation.6.1}{}}
-\newlabel{equ:nonlin_1}{{2}{19}{Statistics}{equation.6.2}{}}
-\newlabel{equ:lin_2}{{3}{19}{Statistics}{equation.6.3}{}}
+\citation{Student1908}
+\citation{Shapiro1965}
+\citation{Razali2011}
+\newlabel{equ:nonlin_1}{{2}{20}{Statistics}{equation.6.2}{}}
+\newlabel{equ:lin_2}{{3}{20}{Statistics}{equation.6.3}{}}
 \newlabel{equ:nonlin_2}{{4}{20}{Statistics}{equation.6.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgments}{20}{section.7}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}List of frequently used abbreviations and variables}{21}{section.8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {{{6.4}.1}}Statistical tests}{20}{subsubsection.6.4.1}}
+\newlabel{sec:statstest}{{{{6.4}.1}}{20}{Statistical tests}{subsubsection.6.4.1}{}}
+\citation{Student1908}
+\citation{Welch1947}
+\citation{MannWhitney1947}
+\citation{Wilcoxon1945}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces List of statistical comparison methods in PyFDAP.}}{21}{table.4}}
+\newlabel{tab:stats}{{4}{21}{List of statistical comparison methods in PyFDAP}{table.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgments}{21}{section.7}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}List of frequently used abbreviations and variables}{22}{section.8}}
 \bibstyle{natbib}
 \bibdata{Blaessle_PyFDAP}
 \bibcite{Broyden1970}{{1}{1970}{{Broyden}}{{Broyden}}}
@@ -107,13 +118,19 @@
 \bibcite{Fletcher1970}{{4}{1970}{{Fletcher}}{{Fletcher}}}
 \bibcite{Goldfarb1970}{{5}{1970}{{Goldfarb}}{{Goldfarb}}}
 \bibcite{Kraft1988}{{6}{1988}{{Kraft}}{{Kraft}}}
-\bibcite{Millman2011}{{7}{2011}{{Millman and Aivazis}}{{Millman and Aivazis}}}
-\bibcite{Mueller2012}{{8}{2012}{{M\"uller {\em  et~al.}}}{{M\"uller, Rogers, Jordan, Lee, Robson, Ramanathan, and Schier}}}
-\bibcite{Nash1984}{{9}{1984}{{Nash}}{{Nash}}}
-\bibcite{Nelder1965}{{10}{1965}{{Nelder and Mead}}{{Nelder and Mead}}}
-\bibcite{Nocedal2006}{{11}{2006}{{Nocedal and Wright}}{{Nocedal and Wright}}}
-\bibcite{Otsu1979}{{12}{1979}{{Otsu}}{{Otsu}}}
-\bibcite{Polak1969}{{13}{1969}{{Polak and Ribi\`{e}re}}{{Polak and Ribi\`{e}re}}}
-\bibcite{Rogers2014}{{14}{2014}{{Rogers {\em  et~al.}}}{{Rogers, Bl\"a{\ss }le, Schier, and M\"uller}}}
-\bibcite{Shanno1970}{{15}{1970}{{Shanno}}{{Shanno}}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}References}{22}{section.9}}
+\bibcite{MannWhitney1947}{{7}{1947}{{Mann and Whitney}}{{Mann and Whitney}}}
+\bibcite{Millman2011}{{8}{2011}{{Millman and Aivazis}}{{Millman and Aivazis}}}
+\bibcite{Mueller2012}{{9}{2012}{{M\"uller {\em  et~al.}}}{{M\"uller, Rogers, Jordan, Lee, Robson, Ramanathan, and Schier}}}
+\bibcite{Nash1984}{{10}{1984}{{Nash}}{{Nash}}}
+\bibcite{Nelder1965}{{11}{1965}{{Nelder and Mead}}{{Nelder and Mead}}}
+\bibcite{Nocedal2006}{{12}{2006}{{Nocedal and Wright}}{{Nocedal and Wright}}}
+\bibcite{Otsu1979}{{13}{1979}{{Otsu}}{{Otsu}}}
+\bibcite{Polak1969}{{14}{1969}{{Polak and Ribi\`{e}re}}{{Polak and Ribi\`{e}re}}}
+\bibcite{Razali2011}{{15}{2011}{{Razali and Wah}}{{Razali and Wah}}}
+\bibcite{Rogers2014}{{16}{2014}{{Rogers {\em  et~al.}}}{{Rogers, Bl\"a{\ss }le, Schier, and M\"uller}}}
+\bibcite{Shanno1970}{{17}{1970}{{Shanno}}{{Shanno}}}
+\bibcite{Shapiro1965}{{18}{1965}{{Shapiro and Wilk}}{{Shapiro and Wilk}}}
+\bibcite{Student1908}{{19}{1908}{{Student}}{{Student}}}
+\bibcite{Welch1947}{{20}{1947}{{Welch}}{{Welch}}}
+\bibcite{Wilcoxon1945}{{21}{1945}{{Wilcoxon}}{{Wilcoxon}}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}References}{23}{section.9}}

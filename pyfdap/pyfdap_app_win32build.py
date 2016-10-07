@@ -48,8 +48,10 @@ import time
 import os, os.path
 import copy as cpy
 import functools
+import warnings
 import Tkinter
 import FileDialog
+
 
 #PyFDP Modules
 import pyfdap_img_module as pyfdap_img
@@ -77,7 +79,7 @@ from matplotlib.figure import Figure
 #=====================================================================================================================================
 
 class pyfdp(QtGui.QMainWindow):
-	def __init__(self, parent=None):
+	def __init__(self,ignWarnings=True,redirect=True, parent=None):
 		QtGui.QWidget.__init__(self, parent)
 	
 		#-------------------------------------------
@@ -88,9 +90,13 @@ class pyfdp(QtGui.QMainWindow):
 		self.setMinimumSize(400,300) 
 		self.resize(1500,1000)
 		self.dpi = 100
-		self.version="1.0"
+		self.version="1.1"
 		self.website="http://people.tuebingen.mpg.de/mueller-lab"
 		self.pyfdap_dir=os.getcwd()
+		self.ignWarnings=ignWarnings
+		self.redirect=redirect
+		
+		#print self.redirect, self.ignWarnings
 		
 		#-------------------------------------------
 		#Statusbar
@@ -112,6 +118,7 @@ class pyfdp(QtGui.QMainWindow):
 		self.curr_mol_node=None
 		self.curr_fit_node=None
 		self.lastopen=os.getcwd()
+		self.copied_embr=None
 		
 		#-------------------------------------------
 		#Menubar entries
@@ -140,11 +147,11 @@ class pyfdp(QtGui.QMainWindow):
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		
 		removemolecule = QtGui.QAction('Remove Molecule', self)
-		removemolecule.setShortcut('Ctrl+Alt+R')	
+		#removemolecule.setShortcut('Ctrl+Alt+R')
+		QtGui.QShortcut(QtGui.QKeySequence("Ctrl+Alt+R"), self, self.delete_molecule)
 		self.connect(removemolecule, QtCore.SIGNAL('triggered()'), self.delete_molecule)
 		
 		copymolecule = QtGui.QAction('Copy Molecule', self)
-		copymolecule.setShortcut('Ctrl+Alt+C')	
 		self.connect(copymolecule, QtCore.SIGNAL('triggered()'), self.copy_molecule)
 		
 		editmolecule = QtGui.QAction('Edit Molecule', self)
@@ -170,6 +177,12 @@ class pyfdp(QtGui.QMainWindow):
 		
 		exporterror = QtGui.QAction('Export errorbar plot to csv-file', self)	
 		self.connect(exporterror, QtCore.SIGNAL('triggered()'), self.export_errorbar_to_csv)
+		
+		exportselobjtocsv = QtGui.QAction('Export selected object to csv-file', self)	
+		self.connect(exportselobjtocsv, QtCore.SIGNAL('triggered()'), self.export_sel_obj_to_csv)
+		
+		exportselfitstocsv = QtGui.QAction('Export selected fits to csv-file', self)	
+		self.connect(exportselfitstocsv, QtCore.SIGNAL('triggered()'), self.export_sel_fits_to_csv)
 		
 		memusage = QtGui.QAction('Print object memory usage', self)
 		self.connect(memusage, QtCore.SIGNAL('triggered()'), self.print_mem_usage)
@@ -214,15 +227,29 @@ class pyfdp(QtGui.QMainWindow):
 		
 		loadembryo = QtGui.QAction('Load Embryo', self)
 		self.connect(loadembryo, QtCore.SIGNAL('triggered()'), self.load_embryo)
-	
+		
+		loadembryocsv = QtGui.QAction('Load Embryos from CSV', self)
+		self.connect(loadembryocsv, QtCore.SIGNAL('triggered()'), self.load_embryos_from_csv)
+		
 		saveembryo = QtGui.QAction('Save Embryo', self)
 		self.connect(saveembryo, QtCore.SIGNAL('triggered()'), self.save_embryo)
 		
 		removeembryo = QtGui.QAction('Remove Embryo', self)
 		self.connect(removeembryo, QtCore.SIGNAL('triggered()'), self.delete_embryo)
 	
+		copyany = QtGui.QAction('Copy Any', self)
+		QtGui.QShortcut(QtGui.QKeySequence("Ctrl+C"), self, self.copy_any)
+		self.connect(copyany, QtCore.SIGNAL('triggered()'), self.copy_any)
+		
+		pasteany = QtGui.QAction('Paste Any', self)
+		QtGui.QShortcut(QtGui.QKeySequence("Ctrl+V"), self, self.paste_any)
+		self.connect(pasteany, QtCore.SIGNAL('triggered()'), self.paste_any)
+		
 		copyembryo = QtGui.QAction('Copy Embryo', self)
 		self.connect(copyembryo, QtCore.SIGNAL('triggered()'), self.copy_embryo)
+		
+		pasteembryo = QtGui.QAction('Paste Embryo', self)
+		self.connect(pasteembryo, QtCore.SIGNAL('triggered()'), self.paste_embryo)
 		
 		editdataset = QtGui.QAction('Edit Embryo', self)
 		self.connect(editdataset, QtCore.SIGNAL('triggered()'), self.edit_dataset)
@@ -236,11 +263,32 @@ class pyfdp(QtGui.QMainWindow):
 		editignored = QtGui.QAction('Edit Ignored Frames', self)
 		self.connect(editignored, QtCore.SIGNAL('triggered()'), self.select_ignored_frames)
 		
+		editthresh = QtGui.QAction('Edit Threshhold', self)
+		self.connect(editthresh, QtCore.SIGNAL('triggered()'), self.edit_thresh)
+		
 		plotdata = QtGui.QAction('Plot analyzed time series', self)
 		self.connect(plotdata, QtCore.SIGNAL('triggered()'), self.plot_data_timeseries)
 		
 		plotdatabkgds = QtGui.QAction('Plot analyzed time series and background values', self)
 		self.connect(plotdatabkgds, QtCore.SIGNAL('triggered()'), self.plot_data_bkgd)
+		
+		plotallextdata = QtGui.QAction('Plot all extracelluar time series and background values', self)
+		self.connect(plotallextdata, QtCore.SIGNAL('triggered()'), self.plot_all_ext_data)
+		
+		plotallintdata = QtGui.QAction('Plot all intracellular time series and background values', self)
+		self.connect(plotallintdata, QtCore.SIGNAL('triggered()'), self.plot_all_int_data)
+		
+		plotallslicedata = QtGui.QAction('Plot all slice time series and background values', self)
+		self.connect(plotallslicedata, QtCore.SIGNAL('triggered()'), self.plot_all_slice_data)
+		
+		plotallextdataign = QtGui.QAction('Plot all extracelluar time series and background values (including ignored tps)', self)
+		self.connect(plotallextdataign, QtCore.SIGNAL('triggered()'), self.plot_all_ext_data_ign)
+		
+		plotallintdataign = QtGui.QAction('Plot all intracellular time series and background values (including ignored tps)', self)
+		self.connect(plotallintdataign, QtCore.SIGNAL('triggered()'), self.plot_all_int_data_ign)
+		
+		plotallslicedataign = QtGui.QAction('Plot all slice time series and background values (including ignored tps)', self)
+		self.connect(plotallslicedataign, QtCore.SIGNAL('triggered()'), self.plot_all_slice_data_ign)
 		
 		plotembryosliceimgs = QtGui.QAction('Plot slice images', self)
 		self.connect(plotembryosliceimgs, QtCore.SIGNAL('triggered()'), self.plot_embryo_slice_imgs)
@@ -259,6 +307,9 @@ class pyfdp(QtGui.QMainWindow):
 		
 		plotembryointmasks = QtGui.QAction('Plot intracellular mask', self)
 		self.connect(plotembryointmasks, QtCore.SIGNAL('triggered()'), self.plot_embryo_masks_int)
+		
+		plotbkgdtimeseries = QtGui.QAction('Plot background timeseries', self)
+		self.connect(plotbkgdtimeseries, QtCore.SIGNAL('triggered()'), self.plot_bkgd_timeseries)
 		
 		plotbkgdsliceimgs = QtGui.QAction('Plot slice images', self)
 		self.connect(plotbkgdsliceimgs, QtCore.SIGNAL('triggered()'), self.plot_bkgd_slice_imgs)
@@ -290,6 +341,18 @@ class pyfdp(QtGui.QMainWindow):
 		
 		editbkgdpre = QtGui.QAction('Edit Pre', self)
 		self.connect(editbkgdpre, QtCore.SIGNAL('triggered()'), self.edit_bkgd_pre)
+		
+		copybkgd = QtGui.QAction('Copy Background', self)
+		self.connect(copybkgd, QtCore.SIGNAL('triggered()'), self.copy_bkgd)
+		
+		pastebkgd = QtGui.QAction('Paste Background', self)
+		self.connect(pastebkgd, QtCore.SIGNAL('triggered()'), self.paste_bkgd)
+		
+		editignoredbkgd = QtGui.QAction('Edit Ignored Frames', self)
+		self.connect(editignoredbkgd, QtCore.SIGNAL('triggered()'), self.select_ignored_frames)
+		
+		loadbkgdcsv = QtGui.QAction('Load Bkgds from CSV', self)
+		self.connect(loadbkgdcsv, QtCore.SIGNAL('triggered()'), self.load_bkgds_from_csv)
 		
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		#Fitting
@@ -328,6 +391,9 @@ class pyfdp(QtGui.QMainWindow):
 		plottrackfit = QtGui.QAction('Plot fitting progress', self)
 		self.connect(plottrackfit, QtCore.SIGNAL('triggered()'), self.plot_track_fit)
 		
+		plotextrapfit = QtGui.QAction('Plot extrapolated fit', self)
+		self.connect(plotextrapfit, QtCore.SIGNAL('triggered()'), self.plot_extrap_fit)
+		
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		#Stats
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -356,8 +422,29 @@ class pyfdp(QtGui.QMainWindow):
 		barall = QtGui.QAction('Plot all parameters by fit', self)
 		self.connect(barall, QtCore.SIGNAL('triggered()'), self.plot_all_by_fit)
 		
+		histk = QtGui.QAction('Histogram ks', self)
+		self.connect(histk, QtCore.SIGNAL('triggered()'), self.hist_k)
+		
+		histtaumin = QtGui.QAction('Histogram halflives', self)
+		self.connect(histtaumin, QtCore.SIGNAL('triggered()'), self.hist_taumin)
+		
 		avgFs  = QtGui.QAction('Compute average correction factors', self)
 		self.connect(avgFs, QtCore.SIGNAL('triggered()'), self.compute_av_corr_Fs)
+		
+		ttest  = QtGui.QAction('Perform standard t-test', self)
+		self.connect(ttest, QtCore.SIGNAL('triggered()'), self.perform_ttest)
+		
+		ttest_welch  = QtGui.QAction('Perform Welchs t-test', self)
+		self.connect(ttest_welch, QtCore.SIGNAL('triggered()'), self.perform_welch)
+		
+		wilcoxontest  = QtGui.QAction('Perform Wilcoxon test', self)
+		self.connect(wilcoxontest, QtCore.SIGNAL('triggered()'), self.perform_wilcoxon)
+		
+		mannwhitneytest  = QtGui.QAction('Perform Mann-Whitney test', self)
+		self.connect(mannwhitneytest, QtCore.SIGNAL('triggered()'), self.perform_mann_whitney)
+		
+		shirapotest  = QtGui.QAction('Perform Shirapo test', self)
+		self.connect(shirapotest, QtCore.SIGNAL('triggered()'), self.perform_sharipo)
 		
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		#Help
@@ -387,6 +474,8 @@ class pyfdp(QtGui.QMainWindow):
 		self.edit_export_mb.addAction(exportmolecule)
 		self.edit_export_mb.addAction(exportfit)
 		self.edit_export_mb.addAction(exporterror)
+		self.edit_export_mb.addAction(exportselobjtocsv)
+		self.edit_export_mb.addAction(exportselfitstocsv)
 		self.edit_mb.addAction(memusage)
 		
 		self.view_mb = self.menubar.addMenu('&View')
@@ -404,19 +493,26 @@ class pyfdp(QtGui.QMainWindow):
 		self.data_data_mb=self.data_mb.addMenu('&Embryo')
 		self.data_data_mb.addAction(newembryo)
 		self.data_data_mb.addAction(loadembryo)
+		self.data_data_mb.addAction(loadembryocsv)
 		self.data_data_mb.addAction(saveembryo)
 		self.data_data_mb.addAction(removeembryo)
 		self.data_data_mb.addAction(copyembryo)
+		self.data_data_mb.addAction(pasteembryo)
 		self.data_data_mb.addAction(editdataset)
 		self.data_data_mb.addAction(editpre)
 		self.data_data_mb.addAction(editnoise)
 		self.data_data_mb.addAction(editignored)
+		self.data_data_mb.addAction(editthresh)
 				
 		self.data_bkgd_mb=self.data_mb.addMenu('&Background Datasets')
 		self.data_bkgd_mb.addAction(addbkgd)
 		self.data_bkgd_mb.addAction(removebkgd)
 		self.data_bkgd_mb.addAction(editbkgd)
 		self.data_bkgd_mb.addAction(editbkgdpre)
+		self.data_bkgd_mb.addAction(copybkgd)
+		self.data_bkgd_mb.addAction(pastebkgd)
+		self.data_bkgd_mb.addAction(editignored)
+		self.data_bkgd_mb.addAction(loadbkgdcsv)
 		
 		self.data_analysis_mb=self.data_mb.addMenu('&Analysis')
 		
@@ -428,6 +524,12 @@ class pyfdp(QtGui.QMainWindow):
 		self.data_plotting_main_mb=self.data_plotting_mb.addMenu('&Main Dataset')
 		self.data_plotting_main_mb.addAction(plotdata)
 		self.data_plotting_main_mb.addAction(plotdatabkgds)
+		self.data_plotting_main_mb.addAction(plotallextdata)
+		self.data_plotting_main_mb.addAction(plotallintdata)
+		self.data_plotting_main_mb.addAction(plotallslicedata)
+		self.data_plotting_main_mb.addAction(plotallextdataign)
+		self.data_plotting_main_mb.addAction(plotallintdataign)
+		self.data_plotting_main_mb.addAction(plotallslicedataign)
 		self.data_plotting_main_mb.addAction(plotembryosliceimgs)
 		self.data_plotting_main_mb.addAction(plotembryoextimgs)
 		self.data_plotting_main_mb.addAction(plotembryointimgs)
@@ -436,7 +538,7 @@ class pyfdp(QtGui.QMainWindow):
 		self.data_plotting_main_mb.addAction(plotembryointmasks)
 		
 		self.data_plotting_bkgd_mb=self.data_plotting_mb.addMenu('&Background Datasets')
-		
+		self.data_plotting_bkgd_mb.addAction(plotbkgdtimeseries)
 		self.data_plotting_bkgd_mb.addAction(plotbkgdsliceimgs)
 		self.data_plotting_bkgd_mb.addAction(plotbkgdextimgs)
 		self.data_plotting_bkgd_mb.addAction(plotbkgdintimgs)
@@ -460,10 +562,18 @@ class pyfdp(QtGui.QMainWindow):
 		self.fit_plot_mb=self.fit_mb.addMenu('&Plotting')
 		self.fit_plot_mb.addAction(plotfit)
 		self.fit_plot_mb.addAction(plottrackfit)
+		self.fit_plot_mb.addAction(plotextrapfit)
+	
 		
 		self.stats_mb = self.menubar.addMenu('&Statistics')
 		self.stats_mb.addAction(sumupmol)
 		self.stats_mb.addAction(avgFs)
+		self.stats_test_mb = self.stats_mb.addMenu('&Tests')
+		self.stats_test_mb.addAction(ttest)
+		self.stats_test_mb.addAction(ttest_welch)
+		self.stats_test_mb.addAction(wilcoxontest)
+		self.stats_test_mb.addAction(mannwhitneytest)
+		self.stats_test_mb.addAction(shirapotest)
 		self.stats_plot_mb = self.stats_mb.addMenu('&Plotting')
 		self.stats_plot_mb.addAction(unpinplot)
 		self.stats_plot_mb.addAction(normplot)
@@ -471,6 +581,9 @@ class pyfdp(QtGui.QMainWindow):
 		self.stats_plot_mb.addAction(bary0s)
 		self.stats_plot_mb.addAction(barc0s)
 		self.stats_plot_mb.addAction(barall)
+		self.stats_plot_mb.addAction(histk)
+		self.stats_plot_mb.addAction(histtaumin)
+		
 		
 		self.help_mb = self.menubar.addMenu('&Help')
 		self.help_mb.addAction(about)
@@ -496,7 +609,7 @@ class pyfdp(QtGui.QMainWindow):
 		#Console
 		#-------------------------------------------
 			
-		self.console = PyInterp(self)
+		self.console = PyInterp(self,ignWarnings=self.ignWarnings,redirect=self.redirect)
 		self.console.initInterpreter(locals())
 		
 		#-------------------------------------------
@@ -550,6 +663,8 @@ class pyfdp(QtGui.QMainWindow):
 		
 		#Load config file
 		self.init_conf()
+		
+		self.bin_width_halfilfe_min=10
 		
 		self.setCentralWidget(self.splitter_ver)
 		QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
@@ -740,62 +855,127 @@ class pyfdp(QtGui.QMainWindow):
 
 			if reply == QtGui.QMessageBox.Yes:
 				
-				fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen,".pk",".pk")
-				
+				#Grab filename
+				fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen+"/"+self.curr_mol.name+".pk","*.pk",)
 				fn_save=str(fn_save)
 				self.lastopen=os.path.dirname(str(fn_save))
+				
+				#Save molecule
 				if fn_save=='':
 					pass
 				else:
-				
 					self.curr_mol.save_molecule(fn_save)
-			
+		
 			else:
 				
+				#Moving everything to temporary molecule
 				if self.curr_conf.backup_to_file:
 					self.fn_backup=self.lastopen+"/"+self.curr_mol.name+"_backup.pk"
 					self.curr_mol.save_molecule(self.fn_backup)
 					temp_mol=self.curr_mol
 				if self.curr_conf.backup_to_mem:
 					temp_mol=cpy.deepcopy(self.curr_mol)
-					
-				for temp_emb in temp_mol.embryos:
+				else:
+					temp_mol=self.curr_mol
 				
-					#Deleting all image data to reduce file size
-					temp_emb.masks_embryo=[]
-					temp_emb.masks_ext=None
-					temp_emb.masks_int=None
+				#Make some temporary lists
+				masks_embryo_list=[]
+				masks_ext_list=[]
+				masks_int_list=[]
+				
+				fits_list=[]
+				
+				bkgd_masks_embryo_list=[]
+				bkgd_masks_ext_list=[]
+				bkgd_masks_int_list=[]
+				bkgd_vals_slice_list=[]
+				
+				for temp_emb in temp_mol.embryos:
+					
+					#Dumping mask and image data into temporay lists
+					if temp_emb.masks_ext!=None:
+						masks_embryo_list.append(list(temp_emb.masks_embryo))
+						masks_ext_list.append(list(temp_emb.masks_ext))
+						masks_int_list.append(list(temp_emb.masks_int))
+					
+						#Deleting all image data to reduce file size
+						temp_emb.masks_embryo=[]
+						temp_emb.masks_ext=None
+						temp_emb.masks_int=None
+						temp_emb.vals_slice=None
 					
 					#Deleting all track fit data
+					fit_list=[]
 					for fit in temp_emb.fits:
+						
+						#Dumping fit data in list
+						fit_list.append([fit.save_track,fit.track_fit,fit.track_parms])	
+						
+						#Clearing all costly fit data
 						fit.save_track=0
 						fit.track_fit=[]
 						fit.track_parms=[]
-						
 					
+					fits_list.append(fit_list)	
+						
 				for bkgd in temp_mol.bkgds:
+					
+					#Dumping fit data in list
+					if bkgd.masks_ext!=None:
+						bkgd_masks_embryo_list.append(list(bkgd.masks_embryo))
+						bkgd_masks_ext_list.append(list(bkgd.masks_ext))
+						bkgd_masks_int_list.append(list(bkgd.masks_int))
+						bkgd_vals_slice_list.append(list(bkgd.bkgd_vals_slice))
+					
+					#Clearing all costly background data
 					bkgd.masks_embryo=[]
 					bkgd.masks_ext=None
 					bkgd.masks_int=None
 					bkgd.bkgd_vals_slice=[]
-					
-				fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen,".pk",".pk")
+				
+				#Grab filename
+				fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen+"/"+self.curr_mol.name+".pk","*.pk",)
 				fn_save=str(fn_save)	
 				self.lastopen=os.path.dirname(str(fn_save))
+				
+				#Save molecule
 				if fn_save=='':
 					pass
 				else:
 					temp_mol.save_molecule(fn_save)
 				
+				#Recovering data
 				if self.curr_conf.backup_to_file:
 					self.curr_mol=self.curr_mol.load_molecule(self.fn_backup)
 					os.remove(self.fn_backup)
 				if self.curr_conf.backup_to_mem:
 					temp_mol=None
-					
+				
+				#Mapping all data back
+				if len(masks_embryo_list)>0:
+					for i,emb in enumerate(self.curr_mol.embryos):
+						
+						emb.masks_embryo=masks_embryo_list[i]
+						emb.masks_ext=masks_ext_list[i]
+						emb.masks_int=masks_int_list[i]
+						
+						for j,fit in enumerate(emb.fits):
+							fit.save_track=fits_list[i][j][0]
+							fit.track_fit=fits_list[i][j][1]
+							fit.track_parms=fits_list[i][j][2]
+				
+				if len(bkgd_masks_embryo_list)>0:
+					for i,bkgd in enumerate(self.curr_mol.bkgds):
+						bkgd.masks_embryo=bkgd_masks_embryo_list[i]
+						bkgd.masks_ext=bkgd_masks_ext_list[i]
+						bkgd.masks_int=bkgd_masks_int_list[i]
+						bkgd.bkgd_vals_slice=bkgd_vals_slice_list[i]
+						
 		if fn_save!='':
 			self.append_recent(fn_save)
-			
+		
+		return True
+	
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Save embryo
 	
@@ -832,12 +1012,19 @@ class pyfdp(QtGui.QMainWindow):
 				else:
 					
 					#Temporarily saving the embryo
-					temp_emb=cpy.deepcopy(self.curr_embr)
+					
+					###NOTE: This seems really slow for big objects, it is probably better to just backup all image data in numpy arrays and then dump the whole thing
+					#temp_emb=cpy.deepcopy(self.curr_embr)
 								
+					#Dumping mask and image data into temporay lists
+					masks_embryo=list(self.curr_embr.masks_embryo)
+					masks_ext=list(self.curr_embr.masks_ext)
+					masks_int=list(self.curr_embr.masks_int)
+					
 					#Deleting all image data to reduce file size
-					temp_emb.masks_embryo=[]
-					temp_emb.masks_ext=None
-					temp_emb.masks_int=None
+					self.curr_embr.masks_embryo=[]
+					self.curr_embr.masks_ext=None
+					self.curr_embr.masks_int=None
 					
 					fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen,".pk",".pk")
 					fn_save=str(fn_save)	
@@ -845,8 +1032,13 @@ class pyfdp(QtGui.QMainWindow):
 					if fn_save=='':
 						pass
 					else:
-						temp_emb.save_embryo(fn_save)
+						self.curr_embr.save_embryo(fn_save)
 	
+					#Putting everything back
+					self.curr_embr.masks_embryo=masks_embryo
+					self.curr_embr.masks_ext=masks_ext
+					self.curr_embr.masks_int=masks_int
+						
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Load molecule
 	
@@ -938,12 +1130,7 @@ class pyfdp(QtGui.QMainWindow):
 			
 		#Add bkgds if they exist
 		for bkgd in mol.bkgds:	
-			if shape(bkgd.bkgd_slice)!=None:
-				self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[bkgd.name,'1',''])
-				self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",'1',''])
-			else:
-				self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[bkgd.name,'0',''])
-				self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",'0',''])
+			self.add_bkgd_to_sidebar(bkgd=bkgd)
 							
 		self.embryos_list.expandItem(self.curr_mol_node)
 		self.embryos_list.expandItem(self.curr_embryos)
@@ -997,6 +1184,17 @@ class pyfdp(QtGui.QMainWindow):
 		#Add embryo to list of embryos
 		self.curr_mol.embryos.append(emb)
 		
+		self.add_embryo_to_sidebar(emb=emb)
+						
+		self.curr_embr=emb
+		self.embryos_list.expandItem(self.curr_embr_node)
+		self.embryos_list.expandItem(self.curr_fits)
+	
+	def add_embryo_to_sidebar(self,emb=None):
+		
+		if emb==None:
+			emb=self.curr_embr
+		
 		#Add to embryo bar
 		analyzed=str(0)
 		fitted=str(0)
@@ -1006,9 +1204,9 @@ class pyfdp(QtGui.QMainWindow):
 			for fit in emb.fits:
 				if shape(fit.fit_av_d)[0]>1:	
 					fitted=str(1)
-			
+		
 		#Adding embryo to sidebar
-		self.curr_embr_node=QtGui.QTreeWidgetItem(self.curr_embryos,[curr_name,analyzed,fitted])
+		self.curr_embr_node=QtGui.QTreeWidgetItem(self.curr_embryos,[emb.name,analyzed,fitted])
 		self.curr_fits=QtGui.QTreeWidgetItem(self.curr_embr_node,["Fits",'',''])
 		self.curr_pre_node=QtGui.QTreeWidgetItem(self.curr_embr_node,["Pre",analyzed,''])
 		self.curr_noise_node=QtGui.QTreeWidgetItem(self.curr_embr_node,["Noise",analyzed,''])
@@ -1019,15 +1217,51 @@ class pyfdp(QtGui.QMainWindow):
 				QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','1'])
 			else:	
 				QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','0'])
-						
-		self.curr_embr=emb
-		self.embryos_list.expandItem(self.curr_embr_node)
-		self.embryos_list.expandItem(self.curr_fits)
+		
+		return
+		
+	def add_bkgd_to_sidebar(self,bkgd=None):
+		
+		if bkgd==None:
+			bkgd=self.curr_bkgd
+		
+		if shape(bkgd.bkgd_slice)!=None:
+			self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[bkgd.name,'1',''])
+			self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",'1',''])
+		else:
+			self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[bkgd.name,'0',''])
+			self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",'0',''])
+				
+	def load_embryos_from_csv(self):
+		
+		csv_dialog=pyfdap_subwin.csv_read_dialog(self.curr_mol,self)
+		
+		if csv_dialog.exec_():
+			embryos = csv_dialog.get_embryos()
+		
+		for emb in embryos:
+			self.add_embryo_to_sidebar(emb=emb)
 			
+	def load_bkgds_from_csv(self):
+		
+		csv_dialog=pyfdap_subwin.csv_read_dialog_bkgds(self.curr_mol,self)
+		
+		if csv_dialog.exec_():
+			bkgds = csv_dialog.get_bkgds()
+		
+		for bkgd in bkgds:
+			self.add_bkgd_to_sidebar(bkgd=bkgd)		
+				
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Show embryo or fit properties in property bar
 	
 	def show_embryo_props(self):
+		
+		if self.ignWarnings:
+			warnings.catch_warnings()
+			
+			warnings.filterwarnings("ignore",category=DeprecationWarning)
+			warnings.filterwarnings("ignore",category=FutureWarning)	
 		
 		#Clearing property list
 		self.prop_list.clear()
@@ -1086,6 +1320,9 @@ class pyfdp(QtGui.QMainWindow):
 				self.curr_embr_node=self.curr_node.parent().parent()
 				self.curr_bkgd_node=None
 		
+		#By default set curr_obj=None
+		self.curr_obj=None
+		
 		#Now define curr_fits and curr_bkgds
 		if self.curr_embr_node!=None:
 			self.curr_fits=self.curr_embr_node.child(0)
@@ -1132,7 +1369,8 @@ class pyfdp(QtGui.QMainWindow):
 			self.parent_node=None
 			self.curr_fit=None
 			self.curr_bkgd=None
-				
+			self.curr_obj=self.curr_mol
+			
 			#Adding all properties of curr_embr to prop_list	
 			for item in vars(self.curr_mol):
 	
@@ -1147,7 +1385,8 @@ class pyfdp(QtGui.QMainWindow):
 			self.parent_node=self.curr_mol_node
 			self.curr_fit=None
 			self.curr_bkgd=None
-				
+			self.curr_obj=self.curr_embr
+			
 			#Adding all properties of curr_embr to prop_list	
 			for item in vars(self.curr_embr):
 	
@@ -1166,6 +1405,7 @@ class pyfdp(QtGui.QMainWindow):
 				self.curr_fit=self.curr_embr.fits[fit_ind]
 			
 				self.curr_fit_node=self.curr_node
+				self.curr_obj=self.curr_fit
 				
 				#Adding all properties of curr_fit to prop_list	
 				for item in vars(self.curr_fit):
@@ -1180,6 +1420,7 @@ class pyfdp(QtGui.QMainWindow):
 				
 				self.curr_pre=self.curr_embr.pre
 				self.curr_pre_node=self.curr_node
+				self.curr_obj=self.curr_pre
 				
 				#Adding all properties of curr_fit to prop_list	
 				for item in vars(self.curr_pre):
@@ -1194,6 +1435,7 @@ class pyfdp(QtGui.QMainWindow):
 				
 				self.curr_bkgd_pre=self.curr_bkgd.pre
 				self.curr_bkgd_pre_node=self.curr_node
+				self.curr_obj=self.curr_bkgd_pre
 				
 				#Adding all properties of curr_fit to prop_list	
 				for item in vars(self.curr_bkgd_pre):
@@ -1208,6 +1450,7 @@ class pyfdp(QtGui.QMainWindow):
 				
 				self.curr_noise=self.curr_embr.noise
 				self.curr_noise_node=self.curr_node
+				self.curr_obj=self.curr_noise
 				
 				#Adding all properties of curr_fit to prop_list	
 				for item in vars(self.curr_noise):
@@ -1222,8 +1465,8 @@ class pyfdp(QtGui.QMainWindow):
 		
 				self.bkgd_ind=self.parent_node.indexOfChild(self.curr_node)
 				self.curr_bkgd=self.curr_mol.bkgds[self.bkgd_ind]
-				
 				self.curr_bkgd_node=self.curr_node
+				self.curr_obj=self.curr_bkgd
 				
 				#Adding all properties of curr_fit to prop_list	
 				for item in vars(self.curr_bkgd):
@@ -1231,7 +1474,8 @@ class pyfdp(QtGui.QMainWindow):
 					#Don't print out large arrays
 					if isinstance(vars(self.curr_bkgd)[str(item)],(int,float,str)) or vars(self.curr_bkgd)[str(item)]==None:
 						curr_str=item+"="+str(vars(self.curr_bkgd)[str(item)])
-						self.prop_list.addItem(curr_str)				
+						self.prop_list.addItem(curr_str)		
+						
 		#Sort prop_list
 		self.prop_list.sortItems()
 	
@@ -1424,7 +1668,13 @@ class pyfdp(QtGui.QMainWindow):
 				in_list=0
 			
 			self.curr_fit.name=new_name
-			self.curr_fit.fit_number=self.curr_fit.fit_number+1
+			
+			#Get maximum fit number
+			tmp=[]
+			for fit in self.curr_embr.fits:
+				tmp.append(fit.fit_number)
+			
+			self.curr_fit.fit_number=max(tmp)+1
 			self.curr_embr.fit_number=self.curr_embr.fit_number+1
 			self.curr_embr.fits.append(self.curr_fit)
 			self.curr_fit_node=QtGui.QTreeWidgetItem(self.curr_fits,[new_name,'','0'])		
@@ -1570,7 +1820,7 @@ class pyfdp(QtGui.QMainWindow):
 			self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[curr_name,'0',''])
 			self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",'0',''])
 			
-			#Create new fit object
+			#Create new bkgd object
 			self.curr_mol.add_bkgd(shape(self.curr_mol.bkgds)[0],curr_name,"default")
 			self.curr_bkgd=self.curr_mol.bkgds[-1]
 			
@@ -1680,15 +1930,33 @@ class pyfdp(QtGui.QMainWindow):
 	def select_ignored_frames(self):
 		
 		#Check if highlighted node is child of embryo
-		if self.curr_embr_node==None:
+		if self.curr_embr_node==None and self.curr_bkgd_node==None:
 			
 			#If not give error msg
-			QtGui.QMessageBox.critical(None, "Error","No embryo selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			QtGui.QMessageBox.critical(None, "Error","No embryo or background selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 			return
 		
-		#Open Bkgd dialog for bkgd dataset
-		ret=pyfdap_subwin.select_ignored_frames(self.curr_embr,self).exec_()
+		#Open selection tool
+		if self.curr_embr_node!=None:
+			ret=pyfdap_subwin.select_ignored_frames(self.curr_embr,self).exec_()
+		elif self.curr_bkgd_node!=None:
+			ret=pyfdap_subwin.select_ignored_frames(self.curr_bkgd,self).exec_()
+	
+	def edit_thresh(self):
 		
+		#Check if highlighted node is child of embryo
+		if self.curr_embr_node==None and self.curr_bkgd_node==None:
+			
+			#If not give error msg
+			QtGui.QMessageBox.critical(None, "Error","No embryo or background selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		#Open selection tool
+		if self.curr_embr_node!=None:
+			ret=pyfdap_subwin.select_threshhold(self.curr_embr,self).exec_()
+		elif self.curr_bkgd_node!=None:
+			ret=pyfdap_subwin.select_threshhold(self.curr_bkgd,self).exec_()
+	
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Edit Molecule
 	
@@ -1740,55 +2008,143 @@ class pyfdp(QtGui.QMainWindow):
 			#Open Bkgd dialog for bkgd data set
 			ret=pyfdap_subwin.noise_dataset_dialog(self.curr_embr.noise,self).exec_()		
 			
+	#----------------------------------------------------------------------------------------------------------------------------------------
+	#Copy any
+	
+	def copy_any(self):
+	
+		if self.curr_embr_node!=None:
+			self.copy_embryo()
+		elif self.curr_bkgd_node!=None:
+			self.copy_bkgd()
+		elif self.curr_embr_node==None and self.curr_bkgd_node==None:
+			self.copy_molecule()
+		
+	def paste_any(self):	
+		
+		if self.copied_embr!=None:
+			self.paste_embryo()
+		elif self.copied_bkgd!=None:
+			self.paste_bkgd()
+		else:
+			QtGui.QMessageBox.critical(None, "Error","Nothing in clipboard.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return	
 	
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Copy embryo
 	
 	def copy_embryo(self):
 		
-		#Check if an molecule is selected
+		#Check if an embryo is selected
 		if self.curr_embr_node!=None:
-			
-			name=str(self.curr_embr.name)
-			curr_name=name+"_copy"
-			
-			self.curr_embr=cpy.deepcopy(self.curr_embr)
-			self.curr_embr.name=curr_name
-			self.curr_mol.embryos.append(self.curr_embr)
-			
-			emb=self.curr_embr
-			
-			#Add to embryo bar
-			analyzed=str(0)
-			fitted=str(0)
-			if shape(emb.ext_av_data_d)[0]>1:
-				analyzed=str(1)
-			if shape(emb.fits)>0:
-				for fit in emb.fits:
-					if shape(fit.fit_av_d)[0]>1:	
-						fitted=str(1)
-				
-			#Adding embryo to sidebar
-			self.curr_embr_node=QtGui.QTreeWidgetItem(self.curr_embryos,[emb.name,analyzed,fitted])
-			self.curr_fits=QtGui.QTreeWidgetItem(self.curr_embr_node,["Fits",'',''])
-			self.curr_pre_node=QtGui.QTreeWidgetItem(self.curr_embr_node,["Pre",analyzed,''])
-			
-			#Add fits if they exist
-			for fit in emb.fits:
-				if shape(fit.fit_av_d)[0]>0:		
-					QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','1'])
-				else:	
-					QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','0'])
-								
-			self.curr_embr=emb
-			self.embryos_list.expandItem(self.curr_embr_node)
-			self.embryos_list.expandItem(self.curr_fits)
-			self.embryos_list.expandItem(self.curr_bkgds)
-					
+			self.copied_embr=cpy.deepcopy(self.curr_embr)
+			self.copied_bkgd=None
 		else:
-			QtGui.QMessageBox.critical(None, "Error","No embryo selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			QtGui.QMessageBox.critical(None, "Error","No background selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return	
+		
+	def paste_embryo(self):
+		if self.curr_mol!=None:
+			if self.copied_embr!=None:
+				emb=self.copied_embr
+				
+				name=str(emb.name)
+				
+				for embr in self.curr_mol.embryos:
+					if name==str(embr.name):
+						curr_name=name+"_copy"
+					else:
+						curr_name=name
+						
+				#Add to embryo bar
+				analyzed=str(0)
+				fitted=str(0)
+				if shape(emb.ext_av_data_d)[0]>1:
+					analyzed=str(1)
+				if shape(emb.fits)>0:
+					for fit in emb.fits:
+						if shape(fit.fit_av_d)[0]>1:	
+							fitted=str(1)
+				
+				#Adding embryo to sidebar
+				self.curr_embr_node=QtGui.QTreeWidgetItem(self.curr_embryos,[emb.name,analyzed,fitted])
+				self.curr_fits=QtGui.QTreeWidgetItem(self.curr_embr_node,["Fits",'',''])
+				self.curr_pre_node=QtGui.QTreeWidgetItem(self.curr_embr_node,["Pre",analyzed,''])
+				
+				#Add fits if they exist
+				for fit in emb.fits:
+					if shape(fit.fit_av_d)[0]>0:		
+						QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','1'])
+					else:	
+						QtGui.QTreeWidgetItem(self.curr_fits,[fit.name,'','0'])
+									
+				self.curr_embr=emb
+				self.curr_mol.embryos.append(emb)
+				self.embryos_list.expandItem(self.curr_embr_node)
+				self.embryos_list.expandItem(self.curr_fits)
+				self.copied_embr=None
+				self.copied_bkgd=None
+				
+			else:
+				QtGui.QMessageBox.critical(None, "Error","No embryo copied yet.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+				return
+		
+		else:
+			QtGui.QMessageBox.critical(None, "Error","No molecule selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 			return
-
+	
+	#----------------------------------------------------------------------------------------------------------------------------------------
+	#Copy bkgd
+	
+	def copy_bkgd(self):
+		
+		#Check if an embryo is selected
+		if self.curr_bkgd_node!=None:	
+			self.copied_bkgd=cpy.deepcopy(self.curr_bkgd)
+			self.copied_embr=None
+		else:
+			QtGui.QMessageBox.critical(None, "Error","No background selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		
+	def paste_bkgd(self):
+		if self.curr_mol!=None:
+			if self.copied_bkgd!=None:
+				bkg=self.copied_bkgd
+				
+				name=str(bkg.name)
+				
+				for b in self.curr_mol.bkgds:
+					if name==str(b.name):
+						curr_name=name+"_copy"
+					else:
+						curr_name=name
+						
+				#Add to embryo bar
+				analyzed=str(0)
+				if shape(bkg.bkgd_ext_vec)[0]>1:
+					analyzed=str(1)
+					
+				#Adding bkgd to sidebar
+				self.curr_bkgd_node=QtGui.QTreeWidgetItem(self.curr_bkgds,[bkg.name,analyzed,''])
+				self.curr_bkgd_pre_node=QtGui.QTreeWidgetItem(self.curr_bkgd_node,["Pre",analyzed,''])
+				
+				#Add to molecule
+				self.curr_mol.bkgds.append(bkg)
+				
+				self.curr_bkgd=bkg
+				self.embryos_list.expandItem(self.curr_bkgd_node)	
+				self.copied_embr=None
+				self.copied_bkgd=None
+				
+			else:
+				QtGui.QMessageBox.critical(None, "Error","No embryo copied yet.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+				return
+		else:
+			QtGui.QMessageBox.critical(None, "Error","No molecule selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+	
+		
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Copy molecule
 	
@@ -2071,7 +2427,12 @@ class pyfdp(QtGui.QMainWindow):
 			return
 		
 		self.create_plot_tab("data")
-		
+		if len(self.curr_embr.ignored)>0:
+			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.int_av_data_ign,'b--',label='int_data without ign')
+			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.ext_av_data_ign,'r--',label='ext_data without ign')
+			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.slice_av_data_ign,'g--',label='slice_data without ign')
+			
+			
 		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.int_av_data_d,'b-',label="int_data")
 		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.ext_av_data_d,'r-',label="ext_data")
 		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.slice_av_data_d,'g-',label="slice_data")
@@ -2359,7 +2720,356 @@ class pyfdp(QtGui.QMainWindow):
 		else: 
 			QtGui.QMessageBox.critical(None, "Error","Did not save fitting tracks.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 			return
+	
+	def plot_extrap_fit(self):
 		
+		if self.curr_node.parent().data(0,0).toString()!="Fits":
+			QtGui.QMessageBox.critical(None, "Error","No fit selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		if shape(self.curr_fit.fit_av_d)[0]>0:
+			pass
+		else:
+			QtGui.QMessageBox.critical(None, "Error","Fit not performed yet.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		self.create_plot_tab("fit")
+		
+		tvec_extrap,f_extrap=pyfdap_fit.extrap_fit_to_end(self.curr_fit,0,6*self.curr_fit.embryo.tvec_data[-1])
+		
+		if shape(self.curr_embr.ignored)[0]>0:
+			if self.curr_fit.fit_ext==1:
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.ext_av_data_ign,'r*',label='ext_data')
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_fit.fit_av_d,'r--',label='fit')
+			if self.curr_fit.fit_slice==1:
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.slice_av_data_ign,'g*',label='slice_data')
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_fit.fit_av_d,'g--',label='fit')
+			if self.curr_fit.fit_int==1:
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.int_av_data_ign,'b*',label='int_data')
+				self.ax.plot(self.curr_embr.tvec_ignored,self.curr_fit.fit_av_d,'b--',label='fit')
+		else:
+			if self.curr_fit.fit_ext==1:
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.ext_av_data_d,'r*',label='ext_data')
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_fit.fit_av_d,'r--',label='fit')
+			if self.curr_fit.fit_slice==1:
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.slice_av_data_d,'g*',label='slice_data')
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_fit.fit_av_d,'g--',label='fit')
+			if self.curr_fit.fit_int==1:
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.int_av_data_d,'b*',label='int_data')
+				self.ax.plot(self.curr_embr.tvec_data,self.curr_fit.fit_av_d,'b--',label='fit')
+		
+		if self.curr_fit.fit_ext==1:
+			self.ax.plot(tvec_extrap,f_extrap,'r:',label='extrap fit')
+		if self.curr_fit.fit_slice==1:
+			self.ax.plot(tvec_extrap,f_extrap,'g:',label='extrap fit')
+		if self.curr_fit.fit_int==1:
+			self.ax.plot(tvec_extrap,f_extrap,'b:',label='extrap fit')
+		
+		#Show ynaught
+		ynaught_plot=self.curr_fit.ynaught_opt*ones(shape(tvec_extrap))
+		self.ax.plot(tvec_extrap,ynaught_plot,'k-',label='y0_opt')
+		
+		#Show cnaught
+		cnaught_plot=(self.curr_fit.cnaught_opt+self.curr_fit.ynaught_opt)*ones(shape(tvec_extrap))
+		self.ax.plot(tvec_extrap,cnaught_plot,'k--',label='c0_opt+y0_opt')
+		
+		#Show halflife in plot
+		f_tau=self.curr_fit.cnaught_opt*exp(-self.curr_fit.k_opt*self.curr_fit.halflife_s)+self.curr_fit.ynaught_opt
+		self.ax.plot([self.curr_fit.halflife_s,self.curr_fit.halflife_s],[self.curr_fit.ynaught_opt,f_tau],'k-')
+		self.ax.plot([0,self.curr_fit.halflife_s],[f_tau,f_tau],'k-')
+		
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		
+		self.adjust_canvas()
+	
+	#----------------------------------------------------------------------------------------------------------------------------------------
+	#Plot background values
+	
+	def plot_bkgd_timeseries(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		if self.curr_bkgd==None:
+			
+			QtGui.QMessageBox.critical(None, "Error","No bkgd selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return	
+		
+		else:
+			
+			for embr in self.curr_mol.embryos:
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				if len(embr.tvec_data)==len(self.curr_bkgd.bkgd_ext_vec):
+					tvec_data=embr.tvec_data
+					break
+				
+			#Plot
+			self.ax.plot(tvec_data,self.curr_bkgd.bkgd_ext_vec,'r-',label="ext")		
+			self.ax.plot(tvec_data,self.curr_bkgd.bkgd_int_vec,'b-',label="int")		
+			self.ax.plot(tvec_data,self.curr_bkgd.bkgd_slice_vec,'g-',label="slice")		
+				
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()		
+	
+	#----------------------------------------------------------------------------------------------------------------------------------------
+	#Plot all dataseries
+	
+	
+	def plot_all_ext_data_ign(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+		
+			if len(embr.ext_av_data_d)>0:
+				
+				#Grab color
+				#c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				self.ax.plot(embr.tvec_data,embr.ext_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.ext_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				#summer
+				
+				tvec_data=None
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					if len(embr.tvec_data)==len(bkgd.bkgd_ext_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_ext_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd_ext_vec)]
+				
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_ext_vec,'-',color=c,label=bkgd.name)		
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()		
+	
+	def plot_all_slice_data_ign(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+			
+			if len(embr.slice_av_data_d)>0:
+				
+				#Grab color
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				self.ax.plot(embr.tvec_data,embr.slice_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.slice_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					if len(embr.tvec_data)==len(bkgd.bkgd_slice_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_slice_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd_slice_vec)]
+				
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_slice_vec,'-',color=c,label=bkgd.name)		
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()		
+		
+	def plot_all_int_data_ign(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+			
+			if len(embr.int_av_data_d)>0:
+				
+				#Grab color
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				self.ax.plot(embr.tvec_data,embr.int_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.int_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					if len(embr.tvec_data)==len(bkgd.bkgd_int_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_int_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd_int_vec)]
+						
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_int_vec,'-',color=c,label=bkgd.name)
+				
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()			
+	
+	def plot_all_ext_data(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+			
+			if len(embr.ext_av_data_d)>0:
+				
+				#Grab color
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				if shape(embr.ignored)[0]>0:	
+					self.ax.plot(embr.tvec_ignored,embr.ext_av_data_ign,'-',color=c,label=embr.name)
+				else:
+					self.ax.plot(embr.tvec_data,embr.ext_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.ext_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					#print len(embr.tvec_data),len(bkgd.bkgd_ext_vec)
+					if len(embr.tvec_data)==len(bkgd.bkgd_ext_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_ext_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd.bkgd_ext_vec)]
+					elif len(embr.tvec_data)<len(bkgd.bkgd_ext_vec):
+						print len(embr.tvec_data)
+						tvec_data=pyfdap_misc.equ_extend_vec(embr.tvec_data,len(bkgd.bkgd_ext_vec)-len(embr.tvec_data))
+						print len(embr.tvec_data)
+						
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_ext_vec,'-',color=c,label=bkgd.name)		
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()			
+	
+	def plot_all_slice_data(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+			
+			if len(embr.slice_av_data_d)>0:
+				
+				#Grab color
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				if shape(embr.ignored)[0]>0:	
+					self.ax.plot(embr.tvec_ignored,embr.slice_av_data_ign,'-',color=c,label=embr.name)
+				else:
+					self.ax.plot(embr.tvec_data,embr.slice_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.slice_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					if len(embr.tvec_data)==len(bkgd.bkgd_slice_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_slice_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd_slice_vec)]	
+				
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_slice_vec,'-',color=c,label=bkgd.name)		
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()		
+		
+	def plot_all_int_data(self):
+		
+		#Create Plot tab
+		self.create_plot_tab("data")
+		
+		#Loop through embryos
+		for i,embr in enumerate(self.curr_mol.embryos):
+			
+			if len(embr.int_av_data_d)>0:
+				
+				#Grab color
+				c = cm.hsv(float(i)/float(len(self.curr_mol.embryos)),1)
+				
+				#Plot
+				if shape(embr.ignored)[0]>0:	
+					self.ax.plot(embr.tvec_ignored,embr.int_av_data_ign,'-',color=c,label=embr.name)
+				else:
+					self.ax.plot(embr.tvec_data,embr.int_av_data_d,'-',color=c,label=embr.name)
+				
+		#Loop through backgrounds
+		for i,bkgd in enumerate(self.curr_mol.bkgds):
+			
+			if len(embr.int_av_data_d)>0:
+				
+				#Grab color
+				c = cm.gray(float(i)/float(len(self.curr_mol.bkgds)),1)
+				
+				#Find fitting tvec for background (bkgds normally don't have tvec)
+				for j,embr in enumerate(self.curr_mol.embryos):
+					if len(embr.tvec_data)==len(bkgd.bkgd_int_vec):
+						tvec_data=embr.tvec_data
+						break
+					elif len(embr.tvec_data)>len(bkgd.bkgd_int_vec):
+						tvec_data=embr.tvec_data[0:len(bkgd_int_vec)]
+						
+				#Plot
+				self.ax.plot(tvec_data,bkgd.bkgd_int_vec,'-',color=c,label=bkgd.name)
+				
+		
+		#Legend and draw
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		self.adjust_canvas()			
+					
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Create plot tab
 	
@@ -2803,6 +3513,10 @@ class pyfdp(QtGui.QMainWindow):
 	
 	def perform_fit(self):
 		
+		if self.curr_fit_node==None:
+			QtGui.QMessageBox.critical(None, "Error","No fit selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return		
+		
 		#Generate wait popup
 		self.wait_popup=pyfdap_subwin.fitting_prog(None)
 		self.wait_popup.accepted.connect(self.fitting_canceled)
@@ -2815,7 +3529,7 @@ class pyfdp(QtGui.QMainWindow):
 		self.fitting_task.start()
 				
 	def fitting_finished(self):
-		
+	
 		self.wait_popup.close()
 		self.statusBar().showMessage("Idle")
 		#Setting fitted=1
@@ -2829,7 +3543,6 @@ class pyfdp(QtGui.QMainWindow):
 			self.plot_fit()
 		
 		self.setEnabled(True)
-	
 		return
 	
 	def fitting_canceled(self):
@@ -3241,6 +3954,51 @@ class pyfdp(QtGui.QMainWindow):
 		
 		return
 	
+	def export_sel_obj_to_csv(self):
+		
+		if self.curr_obj==None:
+			QtGui.QMessageBox.critical(None, "Error","Nothing selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		#Property selector
+		ret=pyfdap_subwin.select_obj_props(self.curr_obj,self).exec_()
+		
+		#Filename
+		if hasattr(self.curr_obj,'name'):
+			fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen+"/"+self.curr_obj.name+".csv","*.csv")
+		else:
+			fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen+"/"+'saved_obj'+".csv","*.csv")	
+		fn_save=str(fn_save)
+		self.lastopen=os.path.dirname(str(fn_save))
+		
+		#Write csv
+		pyfdap_misc.write_csv_sel_props([self.curr_obj],fn_save)
+		
+	def export_sel_fits_to_csv(self):
+		
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
+		
+		if self.curr_mol.sel_fits==[]:
+			return
+		
+		#Property selector
+		ret=pyfdap_subwin.select_obj_props(self.curr_mol.sel_fits[0],self).exec_()
+		
+		#Write same properties in all fit.selected_props
+		names=[]
+		for fit in self.curr_mol.sel_fits:
+			fit.selected_properties=list(self.curr_mol.sel_fits[0].selected_props)
+			names.append(fit.embryo.name+"_"+fit.name)
+			
+		#Filename
+		fn_save=QtGui.QFileDialog.getSaveFileName(self, 'Save file', self.lastopen+"/"+self.curr_mol.name+".csv","*.csv")
+		fn_save=str(fn_save)
+		self.lastopen=os.path.dirname(str(fn_save))
+		
+		#Write csv
+		pyfdap_misc.write_csv_sel_props(self.curr_mol.sel_fits,fn_save,names=names)
+		
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Statistics
 	
@@ -3364,8 +4122,51 @@ class pyfdp(QtGui.QMainWindow):
 		self.ax.set_xticklabels(names,rotation=90)
 		
 		self.adjust_canvas()		
+	
+	def hist_k(self):
 		
-	def norm_data_fit_plot(self):
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
+		
+		ks=[]
+		for fit	in self.curr_mol.sel_fits:
+			
+			ks.append(fit.k_opt)
+			
+		self.hist_parm(ks,'k')
+		
+	def hist_taumin(self):
+		
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
+		
+		hs=[]
+		for fit	in self.curr_mol.sel_fits:
+			
+			hs.append(fit.halflife_min)
+		
+		minbin=min(hs)-mod(min(hs),self.bin_width_halfilfe_min)
+		maxbin=max(hs)+mod(max(hs),self.bin_width_halfilfe_min)
+		
+		bins=arange(minbin-self.bin_width_halfilfe_min,maxbin+self.bin_width_halfilfe_min,self.bin_width_halfilfe_min)
+		
+		self.hist_parm(hs,'halflife_min',lbl_x="halflife (min)",bin_vec=bins)	
+		
+	def hist_parm(self,parmvec,name,names=[],lbl_x="",lbl_y="",bin_vec=None):
+		
+		self.create_plot_tab("bar")	
+		
+		
+		
+		if bin_vec==None:
+			n, bins, patches = self.ax.hist(parmvec, 10, histtype='bar',label=name)
+		else:
+			n, bins, patches = self.ax.hist(parmvec, bin_vec, histtype='bar',label=name)
+		self.ax.set_xlabel(lbl_x)
+		self.ax.set_ylabel(lbl_y)
+		self.adjust_canvas()
+		
+	def norm_data_fit_plot3(self):
 		
 		#Get some fits and embryos if not already existent
 		if self.curr_mol.sel_fits==[]:
@@ -3378,12 +4179,9 @@ class pyfdp(QtGui.QMainWindow):
 		i=0
 
 		for fit in self.curr_mol.sel_fits:
-			#Check if all data sets have same frame rate and nframes
+			#Check if all data sets have same frame rate
 			if fit.embryo.framerate!=last_fit.embryo.framerate:
 				QtGui.QMessageBox.critical(None, "Error","Embryos do not have the same frame rate.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
-				return
-			if fit.embryo.nframes!=last_fit.embryo.nframes:
-				QtGui.QMessageBox.critical(None, "Error","Embryos do not have the same number of frames.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 				return
 			
 			if shape(fit.embryo.ignored)[0]>0:
@@ -3445,8 +4243,145 @@ class pyfdp(QtGui.QMainWindow):
 		self.ax.autoscale(enable=True, axis='x', tight=True)
 		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
 		self.adjust_canvas()
+	
+	def norm_data_fit_plot2(self):
+		
+		#Get some fits and embryos if not already existent
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
 			
+		datas_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
+		times=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
+		fits_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
+		
+		for i,fit in enumerate(self.curr_mol.sel_fits):
+			
+			last_fit=fit
+			
+			#Normalize everything between 0 and 1
+			if last_fit.fit_ext==1:
+				#Put NaN in datavec and tvec if frame is ignored
+				ext_av_data_d=array(fit.embryo.ext_av_data_d)
+				ext_av_data_d[fit.embryo.ignored]=nan
+				datas_norm[i,:]=(asarray(ext_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
+				
+			elif last_fit.fit_int==1:
+				
+				#Put NaN in datavec and tvec if frame is ignored	
+				int_av_data_d=array(fit.embryo.int_av_data_d)
+				int_av_data_d[fit.embryo.ignored]=nan
+				datas_norm[i,:]=(asarray(int_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
+				
+			elif last_fit.fit_slice==1:
+				#Put NaN in datavec and tvec if frame is ignored
+				slice_av_data_d=array(fit.embryo.slice_av_data_d)
+				slice_av_data_d[fit.embryo.ignored]=nan
+				datas_norm[i,:]=(asarray(slice_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt	
+			
+			#Put nan in tvec
+			tvec_data=array(fit.embryo.tvec_data)
+			tvec_data[fit.embryo.ignored]=nan
+			
+			#Append times
+			times[i,:]=fit.embryo.tvec_data
+			
+			#Normalize fit
+			if shape(fit.embryo.ignored)[0]>0:
+				fit=pyfdap_fit.interp_fit(fit)
+				fits_norm[i,:]=(asarray(fit.fit_av_int)-fit.ynaught_opt)/fit.cnaught_opt
+			else:
+				fits_norm[i,:]=(asarray(fit.fit_av_d)-fit.ynaught_opt)/fit.cnaught_opt
+				
+			
+			
+		#Compute mean and std for errorbars
+		errors=[]
+		avgs=[]
+		errors_time=[]
+		avgs_time=[]
+		for i in range(last_fit.embryo.nframes):
+			errors.append(nanstd(datas_norm[:,i]))
+			avgs.append(nanmean(datas_norm[:,i]))
+			errors_time.append(nanstd(times[:,i]))
+			avgs_time.append(nanmean(times[:,i]))
+		
+		#Compute final fit
+		#fit_av=exp(-self.curr_mol.k_av*asarray(avgs_time))
+		fit_av=nanmean(fits_norm,axis=0)
+		
+		#Append everything to molecule for bookkeeping
+		self.curr_mol.tvec_avg=avgs_time
+		self.curr_mol.tvec_errors=errors_time
+		self.curr_mol.fit_av=fit_av
+		self.curr_mol.data_av=avgs
+		self.curr_mol.data_errors=errors
+		
+		#Make plot tab
+		self.create_plot_tab("err")
+		
+		#Finally plot
+		if last_fit.fit_ext==1:
+			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='ro',label='data_av_ext')
+			self.ax.plot(avgs_time,fit_av,'r--',label='fit_av_ext')	
+		if last_fit.fit_int==1:
+			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='bo',label='data_av_int')
+			self.ax.plot(avgs_time,fit_av,'b--',label='fit_av_int')
+		if last_fit.fit_slice==1:
+			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='go',label='data_av_slice')
+			self.ax.plot(avgs_time,fit_av,'g--',label='fit_av_slice')
+		self.ax.autoscale(enable=True, axis='x', tight=True)
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
+		self.adjust_canvas()
+			
+	def norm_data_fit_plot(self):
+		
+		#Get some fits and embryos if not already existent
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
+		
+		#Bin data, pin data and fit
+		self.curr_mol=pyfdap_fit.fit_binned_mol(self.curr_mol,True,plot=False)
+		
+		#Draw plot
+		self.error_bar_mol()
+	
 	def unpin_data_fit_plot(self):
+		
+		#Get some fits and embryos if not already existent
+		if self.curr_mol.sel_fits==[]:
+			self.sumup_molecule()
+		
+		#Bin data, pin data and fit
+		self.curr_mol=pyfdap_fit.fit_binned_mol(self.curr_mol,False,plot=False)
+		
+		#Draw plot
+		self.error_bar_mol()
+	
+	def error_bar_mol(self):
+		
+		#Make plot tab
+		self.create_plot_tab("err")
+		
+		last_fit=self.curr_mol.sel_fits[0]
+		
+		#Finally plot
+		if last_fit.fit_ext==1:
+			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='ro',label='data_av_ext')
+			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_ext')	
+		if last_fit.fit_int==1:
+			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='bo',label='data_av_int')
+			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_int')
+		if last_fit.fit_slice==1:
+			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='go',label='data_av_slice')
+			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_slice')
+			
+		#self.ax.autoscale(enable=True, axis='x', tight=True)
+		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		#self.ax.set_ylim([0,1.1])
+		self.ax.set_xlim(0,self.curr_mol.tvec_avg[-1]+self.curr_mol.embryos[0].framerate)
+		self.adjust_canvas()
+		
+	def unpin_data_fit_plot2(self):
 		
 		#Get some fits and embryos if not already existent
 		if self.curr_mol.sel_fits==[]:
@@ -3525,21 +4460,93 @@ class pyfdp(QtGui.QMainWindow):
 		
 		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
 		self.adjust_canvas()	
+	
+	def sel_molecules(self):
+		
+		names=[]
+		for mol in self.molecules:
+			names.append(mol.name)
+		
+		sel_dialog=pyfdap_subwin.listSelectorDialog(self,names,leftTitle="Available",rightTitle="Selected",itemsRight=[])
+		
+		selectedMols=[]
+		
+		if sel_dialog.exec_():
+			selected = sel_dialog.getSelection()
+			
+			for mol in self.molecules:
+				if mol.name in selected:
+					selectedMols.append(mol)
+			
+		return selectedMols
+	
+	def perform_ttest(self):
+		
+		selected=self.sel_molecules()
+		
+		kopt1=selected[0].get_kopts()
+		kopt2=selected[1].get_kopts()
+		
+		stat,pval=pyfdap_stats.ttest_standard(kopt1,kopt2)
+		
+	def perform_welch(self):
+		
+		selected=self.sel_molecules()
+		
+		kopt1=selected[0].get_kopts()
+		kopt2=selected[1].get_kopts()
+		
+		stat,pval=pyfdap_stats.ttest_welch(kopt1,kopt2)
+			
+	def perform_mann_whitney(self):
+		
+		selected=self.sel_molecules()
+		
+		kopt1=selected[0].get_kopts()
+		kopt2=selected[1].get_kopts()
+		
+		stat,pval=pyfdap_stats.mann_whitney_test(kopt1,kopt2)
+		
+	def perform_wilcoxon(self):
+		
+		selected=self.sel_molecules()
+		
+		kopt1=selected[0].get_kopts()
+		kopt2=selected[1].get_kopts()
+		
+		stat,pval=pyfdap_stats.wilcoxon_test(kopt1,kopt2)
+		
+	def perform_sharipo(self):
+		
+		pyfdap_stats.sharipo_test(self.curr_mol.get_kopts())
 			
 #-------------------------------------------------------------------------------------------------------------------------------------
 #Main
 			
 def main():
-		    
+	
+	try:
+		ignWarnings=bool(int(sys.argv[1]))
+	except:
+		ignWarnings=True
+		
+	try:
+		redirect=bool(int(sys.argv[2]))
+	except:
+		redirect=True
+	
+	print "Launching PyFDAP GUI with options:"
+	print "ignWarnings:" ,ignWarnings
+	print "redirect:", redirect
+		
 	#Creating application	
 	app = QtGui.QApplication(sys.argv)
 	font=app.font()
 	font.setPointSize(12)
 	app.setFont(font)
-	main_win = pyfdp()
+	main_win = pyfdp(ignWarnings=ignWarnings,redirect=redirect)
 	main_win.show()
-	
-	
+
 	sys.exit(app.exec_())
 		
 if __name__ == '__main__':
