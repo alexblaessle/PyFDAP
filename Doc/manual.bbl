@@ -1,0 +1,87 @@
+\begin{thebibliography}{}
+
+\bibitem[Broyden(1970)Broyden]{Broyden1970}
+Broyden, C.~G. (1970).
+\newblock The convergence of a class of double-rank minimization algorithms. 1.
+  {G}eneral considerations.
+\newblock {\em IMA Journal of Applied Mathematics\/}, {\bf 6}(1), 76--90.
+
+\bibitem[Byrd {\em et~al.}(1995)Byrd, Lu, Nocedal, and Zhu]{Byrd1995}
+Byrd, R.~H., Lu, P., Nocedal, J., and Zhu, C. (1995).
+\newblock A limited memory algorithm for bound constrained optimization.
+\newblock {\em SIAM J. Sci. Comput.}, {\bf 16}(5), 1190--1208.
+
+\bibitem[Eldar {\em et~al.}(2003)Eldar, Rosin, Shilo, and Barkai]{Eldar2003}
+Eldar, A., Rosin, D., Shilo, B.~Z., and Barkai, N. (2003).
+\newblock {{S}elf-enhanced ligand degradation underlies robustness of morphogen
+  gradients}.
+\newblock {\em Dev. Cell\/}, {\bf 5}(4), 635--646.
+
+\bibitem[Fletcher(1970)Fletcher]{Fletcher1970}
+Fletcher, R. (1970).
+\newblock A new approach to variable metric algorithms.
+\newblock {\em The Computer Journal\/}, {\bf 13}(3), 317--322.
+
+\bibitem[Goldfarb(1970)Goldfarb]{Goldfarb1970}
+Goldfarb, D. (1970).
+\newblock A family of variable-metric methods derived by variational means.
+\newblock {\em Mathematics of Computation\/}, {\bf 24}, 23--26.
+
+\bibitem[Kraft(1988)Kraft]{Kraft1988}
+Kraft, D. (1988).
+\newblock A software package for sequential quadratic programming.
+\newblock {\em DFVLR-FB 88-28, K\"oln, Germany\/}.
+
+\bibitem[Millman and Aivazis(2011)Millman and Aivazis]{Millman2011}
+Millman, K.~J. and Aivazis, M. (2011).
+\newblock Python for scientists and engineers.
+\newblock {\em Computing in Science \& Engineering\/}, {\bf 13}(2), 9--12.
+
+\bibitem[M\"uller {\em et~al.}(2012)M\"uller, Rogers, Jordan, Lee, Robson,
+  Ramanathan, and Schier]{Mueller2012}
+M\"uller, P., Rogers, K.~W., Jordan, B.~M., Lee, J.~S., Robson, D., Ramanathan,
+  S., and Schier, A.~F. (2012).
+\newblock {{D}ifferential diffusivity of {N}odal and {L}efty underlies a
+  reaction-diffusion patterning system}.
+\newblock {\em Science\/}, {\bf 336}(6082), 721--724.
+
+\bibitem[Nash(1984)Nash]{Nash1984}
+Nash, S.~G. (1984).
+\newblock Newton-type minimization via the {L}anczos method.
+\newblock {\em SIAM Journal on Numerical Analysis\/}, {\bf 21}(4), 770--788.
+
+\bibitem[Nelder and Mead(1965)Nelder and Mead]{Nelder1965}
+Nelder, J.~A. and Mead, R. (1965).
+\newblock A simplex method for function minimization.
+\newblock {\em The Computer Journal\/}, {\bf 7}(4), 308--313.
+
+\bibitem[Nocedal and Wright(2006)Nocedal and Wright]{Nocedal2006}
+Nocedal, J. and Wright, S.~J. (2006).
+\newblock {\em Numerical optimization\/}.
+\newblock Springer series in operations research and financial engineering.
+  Springer, New York, 2. ed. edition.
+
+\bibitem[Otsu(1979)Otsu]{Otsu1979}
+Otsu, N. (1979).
+\newblock A threshold selection method from gray-level histograms.
+\newblock {\em IEEE Trans Syst., Man, Cybern.}, {\bf 9}(1), 62--66.
+
+\bibitem[Polak and Ribi\`{e}re(1969)Polak and Ribi\`{e}re]{Polak1969}
+Polak, E. and Ribi\`{e}re, G. (1969).
+\newblock Note sur la convergence de m\'{e}thodes de directions conjugu\'{e}es.
+\newblock {\em Revue Fran\c{c}aise d'Informatique et de Recherche
+  Op\'{e}rationnelle\/}, {\bf 16}, 35--43.
+
+\bibitem[Rogers {\em et~al.}(2014)Rogers, Bl\"a{\ss}le, Schier, and
+  M\"uller]{Rogers2014}
+Rogers, K.~W., Bl\"a{\ss}le, A., Schier, A.~F., and M\"uller, P. (2014).
+\newblock {Measuring protein stability in living zebrafish embryos using
+  Fluorescence Decay After Photoconversion (FDAP)}.
+\newblock {\em Journal of Visualized Experiments, doi:10.3791/52266\/}.
+
+\bibitem[Shanno(1970)Shanno]{Shanno1970}
+Shanno, D.~F. (1970).
+\newblock Conditioning of quasi-{N}ewton methods for function minimization.
+\newblock {\em Mathematics of Computation\/}, {\bf 24}(111), 647--656.
+
+\end{thebibliography}

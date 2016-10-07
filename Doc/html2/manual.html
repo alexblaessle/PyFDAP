@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="Bluefish 2.2.5" > 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="manual.tex"> 
+<meta name="date" content="2014-11-14T09:02:51+0100" > 
+<link rel="stylesheet" type="text/css" href="manual.css"> 
+</head><body 
+>
+<!--l. 31--><p class="noindent" >
+                                                                                      
+
+                                                                                      
+<div class="center" 
+>
+<!--l. 32--><p class="noindent" >
+<!--l. 35--><p class="noindent" >______________________________________________________________________________________<br /><br />
+<span 
+class="cmbx-12x-x-172">PyFDAP: automated analysis of</span>
+<span 
+class="cmbx-12x-x-172">Fluorescence Decay After Photoconversion</span>
+<span 
+class="cmbx-12x-x-172">(FDAP) experiments</span><br /><br />
+<span 
+class="cmbx-12x-x-172">User Guide</span><br /><br />
+________________________________________________________________<br /><br />
+<span 
+class="cmr-12">Alexander Bl</span><span 
+class="cmr-12">äßle and Patrick M</span><span 
+class="cmr-12">üller</span><br /><br />
+<span 
+class="cmr-12">Friedrich Miescher Laboratory of the Max Planck Society</span><br />
+<span 
+class="cmr-12">Spemannstraße 39</span><br />
+<span 
+class="cmr-12">72076 T</span><span 
+class="cmr-12">übingen</span><br />
+<span 
+class="cmr-12">Germany</span><br /><br />
+<span 
+class="cmr-12">E-Mail: </span><a 
+href="mailto:alexander.blaessle@tuebingen.mpg.de" ><span 
+class="cmr-12">alexander.blaessle@tuebingen.mpg.de</span></a><span 
+class="cmr-12">, </span><a 
+href="mailto:patrick.mueller@tuebingen.mpg.de" ><span 
+class="cmr-12">patrick.mueller@tuebingen.mpg.de</span></a><br />
+<span 
+class="cmr-12">Website: </span><a 
+href="http://people.tuebingen.mpg.de/mueller-lab/" ><span 
+class="cmr-12">http://people.tuebingen.mpg.de/mueller-lab/</span></a>
+</div>
+                                                                                      
+
+                                                                                      
+  <h3 class="likesectionHead"><a 
+ id="x1-1000"></a>Contents</h3>
+  <div class="tableofcontents">
+  <span class="sectionToc" >1 <a 
+href="#x1-20001" id="QQ2-1-2">Introduction</a></span>
+<br />  <span class="sectionToc" >2 <a 
+href="#x1-30002" id="QQ2-1-3">Installation</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.1 <a 
+href="#x1-4000{2.1}" id="QQ2-1-4">Running PyFDAP using stand-alone executables</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.2 <a 
+href="#x1-5000{2.2}" id="QQ2-1-6">Running PyFDAP from source</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.2.1 <a 
+href="#x1-6000{{2.2}.1}" id="QQ2-1-7">Running PyFDAP using the Anaconda distribution</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.2.2 <a 
+href="#x1-7000{{2.2}.2}" id="QQ2-1-8">Running PyFDAP using a manual Python installation</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-8000{{2.2}.2}" id="QQ2-1-9">Manual installation under Linux</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-9000{{2.2}.2}" id="QQ2-1-10">Manual installation under Mac OS X</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-10000{{2.2}.2}" id="QQ2-1-11">Manual installation under Microsoft Windows</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.3 <a 
+href="#x1-11000{2.3}" id="QQ2-1-12">Enabling video output for PyFDAP</a></span>
+<br />  <span class="sectionToc" >3 <a 
+href="#x1-120003" id="QQ2-1-13">Working with PyFDAP</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.1 <a 
+href="#x1-13000{3.1}" id="QQ2-1-14">The PyFDAP main window</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.2 <a 
+href="#x1-14000{3.2}" id="QQ2-1-15">First steps with PyFDAP</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.2.1 <a 
+href="#x1-15000{{3.2}.1}" id="QQ2-1-16">Analyzing an FDAP dataset</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.2.2 <a 
+href="#x1-16000{{3.2}.2}" id="QQ2-1-17">Loading a pre-analyzed dataset</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.3 <a 
+href="#x1-17000{3.3}" id="QQ2-1-18">Making use of statistical functions in PyFDAP</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.4 <a 
+href="#x1-18000{3.4}" id="QQ2-1-19">Saving results from PyFDAP</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.1 <a 
+href="#x1-19000{{3.4}.1}" id="QQ2-1-20">Saving figures and movies</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.2 <a 
+href="#x1-20000{{3.4}.2}" id="QQ2-1-21">Saving molecule and embryo files</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.3 <a 
+href="#x1-21000{{3.4}.3}" id="QQ2-1-22">Saving plots and results as .csv files</a></span>
+<br />  <span class="sectionToc" >4 <a 
+href="#x1-220004" id="QQ2-1-23">Data structure</a></span>
+<br />  <span class="sectionToc" >5 <a 
+href="#x1-230005" id="QQ2-1-25">Performance</a></span>
+<br />  <span class="sectionToc" >6 <a 
+href="#x1-240006" id="QQ2-1-27">Mathematical background</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.1 <a 
+href="#x1-25000{6.1}" id="QQ2-1-28">Decay models</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.2 <a 
+href="#x1-26000{6.2}" id="QQ2-1-29">Estimation of initial guesses and bounds for variables</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.3 <a 
+href="#x1-27000{6.3}" id="QQ2-1-30">Optimization algorithms</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.4 <a 
+href="#x1-28000{6.4}" id="QQ2-1-32">Statistics</a></span>
+<br />  <span class="sectionToc" >7 <a 
+href="#x1-290007" id="QQ2-1-33">Acknowledgments</a></span>
+<br />  <span class="sectionToc" >8 <a 
+href="#x1-300008" id="QQ2-1-34">List of frequently used abbreviations and variables</a></span>
+<br />  <span class="sectionToc" >9 <a 
+href="#x1-310009" id="QQ2-1-35">References</a></span>
+  </div>
+                                                                                      
+
+                                                                                      
+  <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x1-20001"></a>Introduction</h3>
+<!--l. 60--><p class="noindent" >Fluorescence Decay After Photoconversion (FDAP) is a microscopy-based technique for measuring
+protein half-lives (<a 
+href="#XRogers2014">Rogers <span 
+class="cmti-10x-x-109">et</span><span 
+class="cmti-10x-x-109">&#x00A0;al.</span></a>,&#x00A0;<a 
+href="#XRogers2014">2014</a>). In FDAP experiments, a protein of interest is tagged with a
+photoconvertible fluorescent protein and expressed <span 
+class="cmti-10x-x-109">in vivo</span>. The fluorescent fusion protein is then
+photoconverted, and the decrease in fluorescence intensity over time is monitored. The resulting
+intensity data is fitted with a decay function, and half-lives can be calculated from the
+fits.
+<!--l. 62--><p class="indent" >  Both intracellular and extracellular protein half-lives can be determined using FDAP. A static
+intracellular signal (e.g. Alexa488-dextran) can be used to create an intracellular mask, such that only
+intracellular pixels are considered when calculating intracellular intensity. The mask can be inverted
+to calculate extracellular intensities.
+<!--l. 64--><p class="indent" >  Here, we provide a standardized computational framework to analyze FDAP datasets. Our software
+PyFDAP features (i) a comprehensive data format for handling, sorting, and annotating large FDAP
+datasets, (ii) the capability to separate fluorescence intensities in FDAP datasets into intra- and
+extracellular compartments based on counter-labeling, (iii) established fitting algorithms, and (iv) a
+user-friendly environment that allows researchers from a non-computational background to easily
+evaluate FDAP datasets.
+<!--l. 66--><p class="noindent" >
+ 
+                                                                                      
+
+                                                                          
+
+  </div>
+   
+</body></html> 
+
+                                                                                      
+
+

@@ -1,0 +1,69 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{custom}[2014/10/11 manual]
+
+\RequirePackage{}
+
+\def\helvetica{\fontfamily{phv}\selectfont}
+\def\helveticaitalic{\fontfamily{phv}\itshape\selectfont}
+\def\helveticabold{\fontfamily{phv}\bfseries\selectfont}
+\def\helveticabolditalic{\fontfamily{phv}\bfseries\itshape\selectfont}
+
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize{9}{11}%
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\let\@bls\baselineskip
+
+\renewcommand\small{%
+    \@setfontsize\small{9}{11}%
+    \abovedisplayskip 11\p@ minus 3\p@
+    \belowdisplayskip \abovedisplayskip
+    \abovedisplayshortskip \z@ plus 2\p@
+    \belowdisplayshortskip 4\p@ plus 2\p@ minus2\p@
+    \def\@listi{\topsep 4.5\p@ plus 2\p@ minus 1\p@
+       \itemsep \parsep 
+       \topsep 4\p@ plus 2\p@ minus 2\p@}}
+
+\renewcommand\footnotesize{%
+    \@setfontsize\footnotesize{8}{10}%
+    \abovedisplayskip 6\p@ minus 3\p@
+    \belowdisplayskip\abovedisplayskip
+    \abovedisplayshortskip \z@ plus 3\p@
+    \belowdisplayshortskip 6\p@ plus 3\p@ minus 3\p@
+    \def\@listi{\topsep 3\p@ plus 1\p@ minus 1\p@
+       \parsep 2\p@ plus 1\p@ minus 1\p@\itemsep \parsep}}
+       
+\def\scriptsize{\@setfontsize\scriptsize{7pt}{9pt}}
+\def\tiny{\@setfontsize\tiny{5pt}{7pt}}
+\def\large{\@setfontsize\large{11.5pt}{12pt}}
+\def\Large{\@setfontsize\Large{14pt}{16}}
+\def\LARGE{\@setfontsize\LARGE{15pt}{17pt}}
+\def\huge{\@setfontsize\huge{22pt}{22pt}}
+\def\Huge{\@setfontsize\Huge{30pt}{30pt}}
+
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+
+% Line spacing
+\setlength\lineskip{1\p@}
+\setlength\normallineskip{1\p@}
+\renewcommand\baselinestretch{}
+
+% Paragraph dimensions and inter-para spacing
+\setlength\parskip{0\p@}
+\setlength\parindent{3mm}
+
+% Set inter-para skips
+\setlength\smallskipamount{3\p@ \@plus 1\p@ \@minus 1\p@}
+\setlength\medskipamount{6\p@ \@plus 2\p@}
+\setlength\bigskipamount{12\p@ \@plus 4\p@ \@minus 4\p@}
+

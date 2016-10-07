@@ -1,0 +1,136 @@
+@article{Otsu1979,
+author = {Otsu, Nobuyuki},
+journal = {IEEE Trans Syst., Man, Cybern.},
+number = {1},
+pages = {62--66},
+title = {{A Threshold Selection Method from Gray-Level Histograms}},
+volume = {9},
+year = {1979}
+}
+
+@article{Rogers2014,
+author = {Rogers, Katherine W and Bl\"a{\ss}le, Alexander and Schier, Alexander F and M\"uller, Patrick},
+journal = {Journal of Visualized Experiments, in press},
+title = {{Measuring protein stability in living zebrafish embryos using Fluorescence Decay After Photoconversion (FDAP)}},
+year = {2014}
+}
+
+@article{Zhou2012,
+   Author="Zhou, S.  and Lo, W. C.  and Suhalim, J. L.  and Digman, M. A.  and Gratton, E.  and Nie, Q.  and Lander, A. D. ",
+   Title="{{F}ree extracellular diffusion creates the {D}pp morphogen gradient of the {D}rosophila wing disc}",
+   Journal="Curr. Biol.",
+   Year="2012",
+   Volume="22",
+   Number="8",
+   Pages="668--675",
+   Month="Apr"
+}
+
+@article{Eldar2003,
+   Author="Eldar, A.  and Rosin, D.  and Shilo, B. Z.  and Barkai, N. ",
+   Title="{{S}elf-enhanced ligand degradation underlies robustness of morphogen gradients}",
+   Journal="Dev. Cell",
+   Year="2003",
+   Volume="5",
+   Number="4",
+   Pages="635--646",
+   Month="Oct"
+}
+
+@article{Mueller2013,
+   Author={M\"uller, P.  and Rogers, K. W.  and Yu, S. R.  and Brand, M.  and Schier, A. F. },
+   Title="{{M}orphogen transport}",
+   Journal="Development",
+   Year="2013",
+   Volume="140",
+   Number="8",
+   Pages="1621--1638",
+   Month="Apr"
+}
+
+@Article{Mueller2012,
+   Author={M\"uller, P.  and Rogers, K. W.  and Jordan, B. M.  and Lee, J. S.  and Robson, D.  and Ramanathan, S.  and Schier, A. F. },
+   Title="{{D}ifferential diffusivity of {N}odal and {L}efty underlies a reaction-diffusion patterning system}",
+   Journal="Science",
+   Year="2012",
+   Volume="336",
+   Number="6082",
+   Pages="721--724",
+   Month="May"
+}
+
+@Article{Pantazis2014,
+   Author={Pantazis, P.  and Supatto, W. },
+   Title="{{A}dvances in whole-embryo imaging: a quantitative transition is underway}",
+   Journal="Nat. Rev. Mol. Cell Biol.",
+   Year="2014",
+   Volume="15",
+   Number="5",
+   Pages="327--339",
+   Month="May"
+}
+
+@article{Millman2011,
+   author = "Millman, K. Jarrod and Aivazis, Michael",
+   title = "Python for Scientists and Engineers",
+   journal = "Computing in Science \& Engineering",
+   year = "2011",
+   volume = "13",
+   number = "2", 
+   pages = "9-12",
+   url = "http://scitation.aip.org/content/aip/journal/cise/13/2/10.1109/MCSE.2011.36",
+   doi = "http://dx.doi.org/10.1109/MCSE.2011.36" 
+}
+
+@Article{Adam2014,
+   Author="Adam, V.  and Berardozzi, R.  and Byrdin, M.  and Bourgeois, D. ",
+   Title="{{P}hototransformable fluorescent proteins: {F}uture challenges}",
+   Journal="Curr Opin Chem Biol",
+   Year="2014",
+   Volume="20C",
+   Pages="92--102",
+   Month="Jun"
+}
+@article{Nash1984,
+     title = "Newton-Type Minimization Via the Lanczos Method",
+     author = "Nash, Stephen G.",
+     journal = "SIAM Journal on Numerical Analysis",
+     volume = "21",
+     number = "4",
+     Month="Aug.",
+     Year="1984",
+     pages = "770--788",
+    }
+@article{Kraft1988,
+     title = "A software package for sequential quadratic programming",
+     author = "Kraft, Dieter",
+     journal = "Tech. Rep. DFVLR-FB 88-28, DLR German Aerospace Center – Institute for Flight Mechanics, Koln, Germany.",
+     volume = "",
+     number = "",
+     Month="",
+     Year="1988",
+     pages = "",
+    }   
+@article{Nelder1965,
+  author = "Nelder, J. A. and Mead, R.",
+  journal = "The Computer Journal",
+  pages = "308--313",
+  title = "A Simplex Method for Function Minimization",
+  volume = "7"
+  year = "1965"
+}
+@article{Shanno1970,
+    author = "Shanno, D. F.",
+    journal = "Mathematics of Computation",
+    month = "jul",
+    number = "111",
+    pages = "647--656",
+    publisher = "American Mathematical Society",
+    title = "Conditioning of Quasi-Newton Methods for Function Minimization",
+    volume = "24",
+    year = "1970"
+}
+
+
+    
+    

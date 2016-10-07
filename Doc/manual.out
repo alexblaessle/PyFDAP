@@ -1,0 +1,30 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Installation}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Running PyFDAP using stand-alone executables}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Running PyFDAP from source}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Running PyFDAP using the Anaconda distribution}{subsection.2.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Running PyFDAP using a manual Python installation}{subsection.2.2}% 6
+\BOOKMARK [4][-]{section*.2}{Manual installation under Linux}{subsubsection.2.2.2}% 7
+\BOOKMARK [4][-]{section*.3}{Manual installation under Mac OS X}{subsubsection.2.2.2}% 8
+\BOOKMARK [4][-]{section*.4}{Manual installation under Microsoft Windows}{subsubsection.2.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{Enabling video output for PyFDAP}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Working with PyFDAP}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{The PyFDAP main window}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.2}{First steps with PyFDAP}{section.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Analyzing an FDAP dataset}{subsection.3.2}% 14
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Loading a pre-analyzed dataset}{subsection.3.2}% 15
+\BOOKMARK [2][-]{subsection.3.3}{Making use of statistical functions in PyFDAP}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.4}{Saving results from PyFDAP}{section.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Saving figures and movies}{subsection.3.4}% 18
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Saving molecule and embryo files}{subsection.3.4}% 19
+\BOOKMARK [3][-]{subsubsection.3.4.3}{Saving plots and results as .csv files}{subsection.3.4}% 20
+\BOOKMARK [1][-]{section.4}{Data structure}{}% 21
+\BOOKMARK [1][-]{section.5}{Performance}{}% 22
+\BOOKMARK [1][-]{section.6}{Mathematical background}{}% 23
+\BOOKMARK [2][-]{subsection.6.1}{Decay models}{section.6}% 24
+\BOOKMARK [2][-]{subsection.6.2}{Estimation of initial guesses and bounds for variables}{section.6}% 25
+\BOOKMARK [2][-]{subsection.6.3}{Optimization algorithms}{section.6}% 26
+\BOOKMARK [2][-]{subsection.6.4}{Statistics}{section.6}% 27
+\BOOKMARK [1][-]{section.7}{Acknowledgments}{}% 28
+\BOOKMARK [1][-]{section.8}{List of frequently used abbreviations and variables}{}% 29
+\BOOKMARK [1][-]{section.9}{References}{}% 30

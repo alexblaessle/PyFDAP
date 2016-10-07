@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="Bluefish 2.2.5" > 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="manual.tex"> 
+<meta name="date" content="2014-11-14T00:08:54+0100" > 
+<link rel="stylesheet" type="text/css" href="manual.css"> 
+</head><body 
+>
+<!--l. 31--><p class="noindent" >
+                                                                                      
+
+                                                                                      
+<div class="center" 
+>
+<!--l. 32--><p class="noindent" >
+<!--l. 35--><p class="noindent" >______________________________________________________________________________________<br /><br />
+<span 
+class="cmbx-12x-x-172">PyFDAP: automated analysis of</span>
+<span 
+class="cmbx-12x-x-172">Fluorescence Decay After Photoconversion</span>
+<span 
+class="cmbx-12x-x-172">(FDAP) experiments</span><br /><br />
+<span 
+class="cmbx-12x-x-172">User Guide</span><br /><br />
+________________________________________________________________<br /><br />
+<span 
+class="cmr-12">Alexander Bl</span><span 
+class="cmr-12">äßle and Patrick M</span><span 
+class="cmr-12">üller</span><br /><br />
+<span 
+class="cmr-12">Friedrich Miescher Laboratory of the Max Planck Society</span><br />
+<span 
+class="cmr-12">Spemannstraße 39</span><br />
+<span 
+class="cmr-12">72076 T</span><span 
+class="cmr-12">übingen</span><br />
+<span 
+class="cmr-12">Germany</span><br /><br />
+<span 
+class="cmr-12">E-Mail: </span><a 
+href="mailto:alexander.blaessle@tuebingen.mpg.de" ><span 
+class="cmr-12">alexander.blaessle@tuebingen.mpg.de</span></a><span 
+class="cmr-12">, </span><a 
+href="mailto:patrick.mueller@tuebingen.mpg.de" ><span 
+class="cmr-12">patrick.mueller@tuebingen.mpg.de</span></a><br />
+<span 
+class="cmr-12">Website: </span><a 
+href="http://people.tuebingen.mpg.de/mueller-lab/" ><span 
+class="cmr-12">http://people.tuebingen.mpg.de/mueller-lab/</span></a>
+</div>
+                                                                                      
+
+                                                                                      
+  <h3 class="likesectionHead"><a 
+ id="x1-1000"></a>Contents</h3>
+  <div class="tableofcontents">
+  <span class="sectionToc" >1 <a 
+href="#x1-20001" id="QQ2-1-2">Introduction</a></span>
+<br />  <span class="sectionToc" >2 <a 
+href="#x1-30002" id="QQ2-1-3">Installation</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.1 <a 
+href="#x1-4000{2.1}" id="QQ2-1-4">Running PyFDAP using stand-alone executables</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.2 <a 
+href="#x1-5000{2.2}" id="QQ2-1-6">Running PyFDAP from source</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.2.1 <a 
+href="#x1-6000{{2.2}.1}" id="QQ2-1-7">Running PyFDAP using the Anaconda distribution</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >2.2.2 <a 
+href="#x1-7000{{2.2}.2}" id="QQ2-1-8">Running PyFDAP using a manual Python installation</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-8000{{2.2}.2}" id="QQ2-1-9">Manual installation under Linux</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-9000{{2.2}.2}" id="QQ2-1-10">Manual installation under Mac OS X</a></span>
+<br />  &#x00A0;&#x00A0;<span class="paragraphToc" ><a 
+href="#x1-10000{{2.2}.2}" id="QQ2-1-11">Manual installation under Microsoft Windows</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >2.3 <a 
+href="#x1-11000{2.3}" id="QQ2-1-12">Enabling video output for PyFDAP</a></span>
+<br />  <span class="sectionToc" >3 <a 
+href="#x1-120003" id="QQ2-1-13">Working with PyFDAP</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.1 <a 
+href="#x1-13000{3.1}" id="QQ2-1-14">The PyFDAP main window</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.2 <a 
+href="#x1-14000{3.2}" id="QQ2-1-15">First steps with PyFDAP</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.2.1 <a 
+href="#x1-15000{{3.2}.1}" id="QQ2-1-16">Analyzing an FDAP dataset</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.2.2 <a 
+href="#x1-16000{{3.2}.2}" id="QQ2-1-17">Loading a pre-analyzed dataset</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.3 <a 
+href="#x1-17000{3.3}" id="QQ2-1-18">Making use of statistical functions in PyFDAP</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >3.4 <a 
+href="#x1-18000{3.4}" id="QQ2-1-19">Saving results from PyFDAP</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.1 <a 
+href="#x1-19000{{3.4}.1}" id="QQ2-1-20">Saving figures and movies</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.2 <a 
+href="#x1-20000{{3.4}.2}" id="QQ2-1-21">Saving molecule and embryo files</a></span>
+<br />  &#x00A0;&#x00A0;<span class="subsubsectionToc" >3.4.3 <a 
+href="#x1-21000{{3.4}.3}" id="QQ2-1-22">Saving plots and results as .csv files</a></span>
+<br />  <span class="sectionToc" >4 <a 
+href="#x1-220004" id="QQ2-1-23">Data structure</a></span>
+<br />  <span class="sectionToc" >5 <a 
+href="#x1-230005" id="QQ2-1-25">Performance</a></span>
+<br />  <span class="sectionToc" >6 <a 
+href="#x1-240006" id="QQ2-1-27">Mathematical background</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.1 <a 
+href="#x1-25000{6.1}" id="QQ2-1-28">Decay models</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.2 <a 
+href="#x1-26000{6.2}" id="QQ2-1-29">Estimation of initial guesses and bounds for variables</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.3 <a 
+href="#x1-27000{6.3}" id="QQ2-1-30">Optimization algorithms</a></span>
+<br />  &#x00A0;<span class="subsectionToc" >6.4 <a 
+href="#x1-28000{6.4}" id="QQ2-1-32">Statistics</a></span>
+<br />  <span class="sectionToc" >7 <a 
+href="#x1-290007" id="QQ2-1-33">Acknowledgments</a></span>
+<br />  <span class="sectionToc" >8 <a 
+href="#x1-300008" id="QQ2-1-34">List of frequently used abbreviations and variables</a></span>
+<br />  <span class="sectionToc" >9 <a 
+href="#x1-310009" id="QQ2-1-35">References</a></span>
+  </div>
+                                                                                      
+
+                                                                                      
+  <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x1-20001"></a>Introduction</h3>
+<!--l. 60--><p class="noindent" >Fluorescence Decay After Photoconversion (FDAP) is a microscopy-based technique for measuring
+protein half-lives (<a 
+href="#XRogers2014">Rogers <span 
+class="cmti-10x-x-109">et</span><span 
+class="cmti-10x-x-109">&#x00A0;al.</span></a>,&#x00A0;<a 
+href="#XRogers2014">2014</a>). In FDAP experiments, a protein of interest is tagged with a
+photoconvertible fluorescent protein and expressed <span 
+class="cmti-10x-x-109">in vivo</span>. The fluorescent fusion protein is then
+photoconverted, and the decrease in fluorescence intensity over time is monitored. The resulting
+intensity data is fitted with a decay function, and half-lives can be calculated from the
+fits.
+<!--l. 62--><p class="indent" >  Both intracellular and extracellular protein half-lives can be determined using FDAP. A static
+intracellular signal (e.g. Alexa488-dextran) can be used to create an intracellular mask, such that only
+intracellular pixels are considered when calculating intracellular intensity. The mask can be inverted
+to calculate extracellular intensities.
+<!--l. 64--><p class="indent" >  Here, we provide a standardized computational framework to analyze FDAP datasets. Our software
+PyFDAP features (i) a comprehensive data format for handling, sorting, and annotating large FDAP
+datasets, (ii) the capability to separate fluorescence intensities in FDAP datasets into intra- and
+extracellular compartments based on counter-labeling, (iii) established fitting algorithms, and (iv) a
+user-friendly environment that allows researchers from a non-computational background to easily
+evaluate FDAP datasets.
+<!--l. 66--><p class="noindent" >
+ 
+                                                                                      
+
+ 
+  <h3 class="sectionHead"><span class="titlemark">8   </span> <a 
+ id="x1-300008"></a>List of frequently used abbreviations and variables</h3>
+  <div class="tabular"> <table id="TBL-4" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-4-1g"><col 
+id="TBL-4-1"><col 
+id="TBL-4-2"><col 
+id="TBL-4-3"></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-4-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"  
+class="td11">                  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">Name                 </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-2"  
+class="td11"><span 
+class="cmbx-10x-x-109">Description                                                         </span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-1"  
+class="td11">                  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-4-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">Abbreviations</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-1"  
+class="td11">LB                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-2"  
+class="td11">Lower bound                                                                 </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-1"  
+class="td11">UB </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-6-2"  
+class="td11">Upper bound</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-7-1"  
+class="td11">ODE                      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-7-2"  
+class="td11">Ordinary differential equation                                           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-8-1"  
+class="td11">SSD                       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-8-2"  
+class="td11">Sum of squared differences                                               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-9-1"  
+class="td11">                  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-10-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">Variables</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-11-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">b                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-11-2"  
+class="td11">Number of background measurements                                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-12-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">B                      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-12-2"  
+class="td11">Background intensity                                                       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-13-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">c                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-13-2"  
+class="td11">Molecule concentration                                                    </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-14-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">c</span><sub>
+<span 
+class="cmr-8">0</span></sub>                                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-14-2"  
+class="td11">Initial molecule concentration                                           </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-15-1"  
+class="td11"><img 
+src="manual23x.png" alt="&#x02DC;c"  class="tilde" > </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-15-2"  
+class="td11">Normalized molecule concentration</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-16-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">f                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-16-2"  
+class="td11">Number of fits                                                               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-17-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">F                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-17-2"  
+class="td11">Weighting function for the estimation of the lower bound of <span 
+class="cmmi-10x-x-109">y</span><sub><span 
+class="cmr-8">0</span></sub></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-18-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">i                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-18-2"  
+class="td11">Control variable                                                             </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-19-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">I </span></td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-19-2"  
+class="td11">Fluorescence intensity</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-20-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">j                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-20-2"  
+class="td11">Control variable                                                             </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-21-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">k                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-21-2"  
+class="td11">Molecule decay rate constant                                            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-22-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">l                        </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-22-2"  
+class="td11">Control variable                                                             </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-23-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">m </span></td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-23-2"  
+class="td11">Number of measurements</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-24-1"  
+class="td11"><img 
+src="manual24x.png" alt="&#x02DC;m"  class="tilde" >                      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-24-2"  
+class="td11">Number of selected fits for averaging                                  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-25-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">n                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-25-2"  
+class="td11">Degree of non-linearity of molecule decay                            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-26-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-26-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">N                      </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-26-2"  
+class="td11">Noise intensity                                                               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-27-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-27-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">r                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-27-2"  
+class="td11">Region of measurement                                                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-28-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">t                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-28-2"  
+class="td11">Time                                                                            </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-29-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-29-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">T </span></td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-29-2"  
+class="td11">Number of post-conversion frames</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-30-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-30-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">&#x03C4;                       </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-30-2"  
+class="td11">Molecule half-life                                                            </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-31-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-31-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">x</span><sub>
+<span 
+class="cmr-8">0</span></sub>                                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-31-2"  
+class="td11">Initial parameter guess                                                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-32-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-32-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">y</span><sub><span 
+class="cmr-8">0</span></sub>                                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-32-2"  
+class="td11">Molecule decay baseline                                                   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-33-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-33-1"  
+class="td11">                  </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-34-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-34-1"  
+class="td11"><span 
+class="cmbx-10x-x-109">Variable subscripts</span></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-35-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-35-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">ext                     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-35-2"  
+class="td11">Extracellular                                                                 </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-36-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-36-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">int </span></td> <td  style="white-space:nowrap; text-align:left;" id="TBL-4-36-2"  
+class="td11">Intracellular</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-37-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-37-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">post                    </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-37-2"  
+class="td11">After photoconversion                                                     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-38-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-38-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">pre                     </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-38-2"  
+class="td11">Before photoconversion                                                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-39-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-39-1"  
+class="td11"><span 
+class="cmmi-10x-x-109">slice                   </span></td><td  style="white-space:nowrap; text-align:left;" id="TBL-4-39-2"  
+class="td11">Entire optical slice                                                          </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-4-40-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-40-1"  
+class="td11">                  </td> </tr></table></div>
+                                                                                      
+
+                                                                                      
+<!--l. 1--><p class="noindent" >
+  <h3 class="sectionHead"><span class="titlemark">9   </span> <a 
+ id="x1-310009"></a>References</h3>
+<!--l. 1--><p class="noindent" >
+  <div class="thebibliography">
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XBroyden1970"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Broyden, C.</span><span 
+class="cmr-7">&#x00A0;G. (1970). The convergence of a class of double-rank minimization algorithms. 1. General considerations. </span><span 
+class="cmti-7">IMA</span>
+  <span 
+class="cmti-7">Journal of Applied Mathematics</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">6</span><span 
+class="cmr-7">(1), 76&#8211;90.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XByrd1995"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Byrd, R.</span><span 
+class="cmr-7">&#x00A0;H., Lu, P., Nocedal, J., and Zhu, C. (1995). A limited memory algorithm for bound constrained optimization. </span><span 
+class="cmti-7">SIAM</span>
+  <span 
+class="cmti-7">J. Sci. Comput.</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">16</span><span 
+class="cmr-7">(5), 1190&#8211;1208.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XEldar2003"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Eldar, A., Rosin, D., Shilo, B.</span><span 
+class="cmr-7">&#x00A0;Z., and Barkai, N. (2003). Self-enhanced ligand degradation underlies robustness of morphogen</span>
+  <span 
+class="cmr-7">gradients. </span><span 
+class="cmti-7">Dev. Cell</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">5</span><span 
+class="cmr-7">(4), 635&#8211;646.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XFletcher1970"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Fletcher, R. (1970). A new approach to variable metric algorithms. </span><span 
+class="cmti-7">The Computer Journal</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">13</span><span 
+class="cmr-7">(3), 317&#8211;322.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XGoldfarb1970"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Goldfarb, D. (1970).  A family of variable-metric methods derived by variational means.  </span><span 
+class="cmti-7">Mathematics of Computation</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">24</span><span 
+class="cmr-7">,</span>
+  <span 
+class="cmr-7">23&#8211;26.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XKraft1988"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Kraft, D. (1988). A software package for sequential quadratic programming. </span><span 
+class="cmti-7">DFVLR-FB 88-28, K</span><span 
+class="cmti-7">öln, Germany</span><span 
+class="cmr-7">.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XMillman2011"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Millman, K.</span><span 
+class="cmr-7">&#x00A0;J. and Aivazis, M. (2011).  Python for scientists and engineers.  </span><span 
+class="cmti-7">Computing in Science &amp; Engineering</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">13</span><span 
+class="cmr-7">(2),</span>
+  <span 
+class="cmr-7">9&#8211;12.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XMueller2012"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">M</span><span 
+class="cmr-7">üller, P., Rogers, K.</span><span 
+class="cmr-7">&#x00A0;W., Jordan, B.</span><span 
+class="cmr-7">&#x00A0;M., Lee, J.</span><span 
+class="cmr-7">&#x00A0;S., Robson, D., Ramanathan, S., and Schier, A.</span><span 
+class="cmr-7">&#x00A0;F. (2012).  Differential</span>
+  <span 
+class="cmr-7">diffusivity of Nodal and Lefty underlies a reaction-diffusion patterning system. </span><span 
+class="cmti-7">Science</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">336</span><span 
+class="cmr-7">(6082), 721&#8211;724.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XNash1984"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Nash, S.</span><span 
+class="cmr-7">&#x00A0;G. (1984).  Newton-type minimization via the Lanczos method.  </span><span 
+class="cmti-7">SIAM Journal on Numerical Analysis</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">21</span><span 
+class="cmr-7">(4),</span>
+  <span 
+class="cmr-7">770&#8211;788.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XNelder1965"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Nelder, J.</span><span 
+class="cmr-7">&#x00A0;A. and Mead, R. (1965). A simplex method for function minimization. </span><span 
+class="cmti-7">The Computer Journal</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">7</span><span 
+class="cmr-7">(4), 308&#8211;313.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XNocedal2006"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Nocedal, J. and Wright, S.</span><span 
+class="cmr-7">&#x00A0;J. (2006). </span><span 
+class="cmti-7">Numerical optimization</span><span 
+class="cmr-7">. Springer series in operations research and financial engineering.</span>
+  <span 
+class="cmr-7">Springer, New York, 2. ed. edition.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XOtsu1979"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Otsu, N. (1979). A threshold selection method from gray-level histograms. </span><span 
+class="cmti-7">IEEE Trans Syst., Man, Cybern.</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">9</span><span 
+class="cmr-7">(1), 62&#8211;66.</span>
+                                                                                      
+
+                                                                                      
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XPolak1969"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Polak,  E.  and  Ribi</span><span 
+class="cmr-7">ère,  G.  (1969).   Note  sur  la  convergence  de  m</span><span 
+class="cmr-7">éthodes  de  directions  conjugu</span><span 
+class="cmr-7">ées.   </span><span 
+class="cmti-7">Revue  Fran</span><span 
+class="cmti-7">çaise</span>
+  <span 
+class="cmti-7">d&#8217;Informatique et de Recherche Op</span><span 
+class="cmti-7">érationnelle</span><span 
+class="cmr-7">, </span><span 
+class="cmbx-7">16</span><span 
+class="cmr-7">, 35&#8211;43.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XRogers2014"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Rogers, K.</span><span 
+class="cmr-7">&#x00A0;W., Bl</span><span 
+class="cmr-7">äßle, A., Schier, A.</span><span 
+class="cmr-7">&#x00A0;F., and M</span><span 
+class="cmr-7">üller, P. (2014). Measuring protein stability in living zebrafish embryos using</span>
+  <span 
+class="cmr-7">Fluorescence Decay After Photoconversion (FDAP). </span><span 
+class="cmti-7">Journal of Visualized Experiments, doi:10.3791/52266</span><span 
+class="cmr-7">.</span>
+  </p>
+  <p class="bibitem" ><span class="biblabel">
+<a 
+ id="XShanno1970"></a><span class="bibsp"><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span><span 
+class="cmr-7">&#x00A0;</span></span></span><span 
+class="cmr-7">Shanno, D.</span><span 
+class="cmr-7">&#x00A0;F. (1970).  Conditioning of quasi-Newton methods for function minimization.  </span><span 
+class="cmti-7">Mathematics of Computation</span><span 
+class="cmr-7">,</span>
+  <span 
+class="cmbx-7">24</span><span 
+class="cmr-7">(111), 647&#8211;656.</span>
+</p>
+  </div>
+   
+</body></html> 
+
+                                                                                      
+
+

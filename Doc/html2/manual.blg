@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: manual.aux
+The style file: natbib.bst
+Database file #1: Blaessle_PyFDAP.bib
+I was expecting a `,' or a `}'---line 16 of file Blaessle_PyFDAP.bib
+ :  
+ :  doi = "doi:10.3791/52266"
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 15 entries,
+            2378 wiz_defined-function locations,
+            640 strings with 6521 characters,
+and the built_in function-call counts, 6853 in all, are:
+= -- 692
+> -- 319
+< -- 11
++ -- 105
+- -- 91
+* -- 607
+:= -- 1192
+add.period$ -- 65
+call.type$ -- 15
+change.case$ -- 94
+chr.to.int$ -- 15
+cite$ -- 15
+duplicate$ -- 275
+empty$ -- 461
+format.name$ -- 114
+if$ -- 1345
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 16
+newline$ -- 78
+num.names$ -- 60
+pop$ -- 79
+preamble$ -- 1
+purify$ -- 94
+quote$ -- 0
+skip$ -- 188
+stack$ -- 0
+substring$ -- 478
+swap$ -- 46
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 132
+warning$ -- 0
+while$ -- 67
+width$ -- 0
+write$ -- 197
+(There was 1 error message)

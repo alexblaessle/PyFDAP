@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="pyfdap_icon.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70000001"
+     inkscape:cx="641.25784"
+     inkscape:cy="657.69671"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1151"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3003" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3757"
+       style="font-size:36px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
+         id="flowRegion3759"><rect
+           id="rect3761"
+           width="111.11678"
+           height="76.771591"
+           x="313.14728"
+           y="472.53461"
+           style="font-size:36px" /></flowRegion><flowPara
+         id="flowPara3763" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3765"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:36px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion3767"><rect
+           id="rect3769"
+           width="117.1777"
+           height="121.21831"
+           x="326.27927"
+           y="449.30112"
+           style="font-size:36px" /></flowRegion><flowPara
+         id="flowPara3771" /></flowRoot>    <g
+       id="g3819"
+       inkscape:export-filename="/home/alex_loc/Documents/Research/PyFDAP/pyFDAP_Code/pyfdap_icon.png"
+       inkscape:export-xdpi="282.86249"
+       inkscape:export-ydpi="282.86249">
+      <path
+         sodipodi:nodetypes="cccc"
+         inkscape:connector-curvature="0"
+         id="path2987"
+         d="m 430,612.36218 c -87.43747,-0.67475 -150.00607,-40.9757 -157.34359,-160.36797 0,160.36797 0,160.36797 0,160.36797 157.34359,0 157.34359,0 157.34359,0 z"
+         style="fill:#b3b3b3;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3773"
+         y="508.69885"
+         x="311.09338"
+         style="font-size:11.81670761px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:42.54014587px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+           id="tspan3777"
+           y="508.69885"
+           x="311.09338"
+           sodipodi:role="line" /><tspan
+           style="font-size:37.81346512px;font-weight:bold;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+           id="tspan3783"
+           y="557.16272"
+           x="311.09338"
+           sodipodi:role="line"><tspan
+   style="font-size:37.81346512px;font-weight:bold;fill:#0aff01;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+   id="tspan3815">FD</tspan>AP</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3773-7"
+         y="513.76678"
+         x="297.89465"
+         style="font-size:37.81px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:37.81px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+           id="tspan3777-9"
+           y="513.76678"
+           x="297.89465"
+           sodipodi:role="line">Py</tspan><tspan
+           style="font-size:37.81px;font-weight:bold;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Sans Bold"
+           id="tspan3783-0"
+           y="566.94196"
+           x="297.89465"
+           sodipodi:role="line" /></text>
+      <rect
+         inkscape:export-ydpi="299.99185"
+         inkscape:export-xdpi="299.99185"
+         inkscape:export-filename="/home/alex_loc/Documents/Research/PyFDAP/pyFDAP_Code/logo.png"
+         y="452.36218"
+         x="272.85715"
+         height="160.71428"
+         width="160.71428"
+         id="rect3817"
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+  </g>
+</svg>
