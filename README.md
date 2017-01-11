@@ -134,4 +134,4 @@ If you use PyFDAP for your research, please cite the original publication:
 - Fixed Bug where analyze all datasets resulted in error if dataset had no background dataset.
 - Fixed some unnecessary print outs.
 - Fixed save dialog to show .pk files and also autocomplete filename.
-- Fixed a bug in copy_fit where fit.fit_number was getting assigned in the wrong way.   
+- Fixed a bug in copy_fit where fit.fit_number was getting assigned in the wrong way. 

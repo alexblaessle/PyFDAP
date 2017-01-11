@@ -65,7 +65,7 @@ import os, os.path
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as  NavigationToolbar
+#from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as  NavigationToolbar
 from matplotlib.figure import Figure
 #import skimage.io as skiio
 import matplotlib.image as mpimg
@@ -4192,7 +4192,7 @@ class select_ignored_frames(QtGui.QDialog):
 		
 		#Collecting ignored frames
 		if hasattr(self.obj,'ignored'):
-			pass
+			self.obj.ignored=list(self.obj.ignored)
 		else:
 			self.obj.ignored=[]
 		
@@ -4248,15 +4248,16 @@ class select_ignored_frames(QtGui.QDialog):
 		
 		self.obj.ignored.sort()
 		
-		if 'embryo' in str(type(self.obj)):
+		if 'embryo' == self.obj.__class__.__name__:
 			self.obj.tvec_ignored=delete(self.obj.tvec_data,self.obj.ignored)	
 		
-		if 'embryo' in str(type(self.obj)):
+		if 'embryo' == self.obj.__class__.__name__:
 			if shape(self.obj.ext_av_data_d)[0]>0:
 				self.obj.ext_av_data_ign=delete(self.obj.ext_av_data_d,self.obj.ignored)
 				self.obj.int_av_data_ign=delete(self.obj.int_av_data_d,self.obj.ignored)
 				self.obj.slice_av_data_ign=delete(self.obj.slice_av_data_d,self.obj.ignored)
-		if 'bkgd' in str(type(self.obj)):
+		
+		if 'bkgd' in self.obj.__class__.__name__:
 			if shape(self.obj.bkgd_ext_vec)[0]>0:
 				self.obj.bkgd_ext_vec_ign=delete(self.obj.bkgd_ext_vec,self.obj.ignored)
 				self.obj.bkgd_int_vec_ign=delete(self.obj.bkgd_int_vec,self.obj.ignored)

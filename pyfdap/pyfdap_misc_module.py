@@ -552,6 +552,22 @@ def gen_embryos_from_csv(fn,ident=["time,ext","int","slice","pre_ext","pre_int",
 				except:
 					print "Warning, cannot set timeseries with header" + header[i] + " . Embryo does not have timeseries."
 		
+		# Check for ignored timepoints
+		vecs=[emb.ext_av_data_d,emb.int_av_data_d,emb.slice_av_data_d]
+		lens=[len(emb.ext_av_data_d),len(emb.int_av_data_d),len(emb.slice_av_data_d)]
+		
+		emb.ignored=where(isnan(vecs[lens.index(max(lens))]))[0]
+		emb.ext_av_data_ign=delete(emb.ext_av_data_d,emb.ignored)	
+		emb.int_av_data_ign=delete(emb.int_av_data_d,emb.ignored)	
+		emb.slice_av_data_ign=delete(emb.slice_av_data_d,emb.ignored)	
+		emb.tvec_ignored=delete(emb.tvec_data,emb.ignored)	
+		
+		# Add some dummy values in centers and radiuses list 
+		# (some functions in GUI use it to generate some stuff, so there better be something in)
+		emb.centers_embr_px=len(emb.tvec_data)*[[256,256]]
+		emb.radiuses_embr_px=len(emb.tvec_data)*[300]
+		
+		# Append
 		embryos.append(emb)
 				
 	return embryos
@@ -668,8 +684,23 @@ def gen_bkgds_from_csv(fn,mol,ident=["time,ext","int","slice","pre_ext","pre_int
 				except:
 					print "Warning, cannot set timeseries with header" + header[i] + " . Embryo does not have timeseries."
 		
+		# Check for ignored timepoints
+		vecs=[bkgd.ext_vec,bkgd.int_vec,bkgd.slice_vec]
+		lens=[len(bkgd.ext_vec),len(bkgd.int_vec),len(bkgd.slice_vec)]
+		
+		bkgd.ignored=where(isnan(bkgd.ext_vec))[0]
+		bkgd.ext_av_data_ign=delete(bkgd.ext_vec,bkgd.ignored)	
+		bkgd.int_av_data_ign=delete(bkgd.int_vec,bkgd.ignored)	
+		bkgd.slice_av_data_ign=delete(bkgd.slice_vec,bkgd.ignored)	
+		
+		# Add some dummy values in centers and radiuses list 
+		# (some functions in GUI use it to generate some stuff, so there better be something in)
+		bkgd.centers_embr_px=len(bkgd.ext_vec)*[[256,256]]
+		bkgd.radiuses_embr_px=len(bkgd.ext_vec)*[300]
+		
 		bkgds.append(bkgd)
-	
+		
+		
 	#Update average bkgd values
 	mol=pyfdap_img_module.compute_av_bkgd(mol)
 	
@@ -708,16 +739,25 @@ def read_csv(fn,delim=',',hasheader=True,toarray=True,dtype=float):
 					header=row
 				else:
 					header=[]
-					data.append(row)
+					data.append(replace_list(row,'',nan))
 			else:
-				data.append(row)
+				data.append(replace_list(row,'',nan))
 		
 		if asarray:
 			data=asarray(data).astype(dtype)
 			
 	return header,data
 
-
+def replace_list(l,vOld,vNew):
+	
+	"""Replaces all occurences of vOld with vNew in list.
+	"""
+	
+	for i,x in enumerate(l):
+		if x==vOld:
+			l[i]=vNew
+		
+	return l	
 	
 
 	

@@ -6,7 +6,6 @@ print "This system is running", platform.system(), platform.release(), platform.
 arch1=platform.architecture()[0]
 arch2=platform.machine()
 
-
 if platform.system() in ["Darwin"]:
 	name="pyfdap_"+"OSX_"+platform.mac_ver()[0]+"_"+arch1
 	os.system("pyinstaller -F -y -n "+ name +" -i logo/pyfdap_icon.icns --windowed pyfdap_app.py")

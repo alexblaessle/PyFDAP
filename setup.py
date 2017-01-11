@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyfdap',
-      version='1.1',
+      version='1.1.1',
       description='PyFDAP: automated analysis of Fluorescence Decay After Photoconversion(FDAP) experiments',
       url='https://github.com/alexblaessle/PyFDAP',
       author='Alexander Blaessle',

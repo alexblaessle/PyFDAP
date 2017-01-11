@@ -2,6 +2,7 @@
 
 old_versions/
 pyfdap_v1.0/
+pyfdap_v1.1/
 Website/
 Website_backup/
 Requests/
@@ -21,6 +22,9 @@ build/
 pyfdap/build/
 pyfdap/dist/
 pyfdap/logo/
+
+#Don't push html version of Doc
+Doc/html*
 
 #Dont push egg
 *.egg-info

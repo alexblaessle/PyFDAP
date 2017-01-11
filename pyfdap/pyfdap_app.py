@@ -69,7 +69,7 @@ from PyQt4 import QtGui, QtCore
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as  NavigationToolbar
+#from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as  NavigationToolbar
 from matplotlib.figure import Figure
 
 #=====================================================================================================================================
@@ -88,7 +88,7 @@ class pyfdp(QtGui.QMainWindow):
 		self.setMinimumSize(400,300) 
 		self.resize(1500,1000)
 		self.dpi = 100
-		self.version="1.1"
+		self.version="1.1.1"
 		self.website="http://people.tuebingen.mpg.de/mueller-lab"
 		self.pyfdap_dir=os.getcwd()
 		self.ignWarnings=ignWarnings
@@ -2426,17 +2426,27 @@ class pyfdp(QtGui.QMainWindow):
 		
 		self.create_plot_tab("data")
 		if len(self.curr_embr.ignored)>0:
-			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.int_av_data_ign,'b--',label='int_data without ign')
-			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.ext_av_data_ign,'r--',label='ext_data without ign')
-			self.ax.plot(self.curr_embr.tvec_ignored,self.curr_embr.slice_av_data_ign,'g--',label='slice_data without ign')
+			self.try_plot_data(self.curr_embr.tvec_ignored,self.curr_embr.int_av_data_ign,'b','--','int_data without ign',self.ax)
+			self.try_plot_data(self.curr_embr.tvec_ignored,self.curr_embr.ext_av_data_ign,'r','--','ext_data without ign',self.ax)
+			self.try_plot_data(self.curr_embr.tvec_ignored,self.curr_embr.slice_av_data_ign,'g','--','slice_data without ign',self.ax)
+		else:	
+			self.try_plot_data(self.curr_embr.tvec_data,self.curr_embr.int_av_data_d,'b','-','int_data',self.ax)
+			self.try_plot_data(self.curr_embr.tvec_data,self.curr_embr.ext_av_data_d,'r','-','ext_data',self.ax)
+			self.try_plot_data(self.curr_embr.tvec_data,self.curr_embr.slice_av_data_d,'g','-','slice_data',self.ax)
 			
-			
-		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.int_av_data_d,'b-',label="int_data")
-		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.ext_av_data_d,'r-',label="ext_data")
-		self.ax.plot(self.curr_embr.tvec_data,self.curr_embr.slice_av_data_d,'g-',label="slice_data")
 		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
 		
 		self.adjust_canvas()
+	
+	def try_plot_data(self,tvec,data,color,ls,label,ax):
+		
+		try:
+			ax.plot(tvec,data,c=color,ls=ls,label=label)
+		except:
+			print "Was not able to plot ", label
+			
+		return ax
+		
 	
 	def plot_data_bkgd(self):
 		

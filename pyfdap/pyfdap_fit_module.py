@@ -57,9 +57,6 @@ def LB_ynaught_func(molecule,embryo,this_fit):
 	
 	molecule=comp_corr_F(molecule,embryo)
 	
-	print embryo.noise.noise
-	print embryo.F_ext
-	
 	if embryo.fits[this_fit].fit_ext==1:	
 		print type(embryo.pre.pre_ext)
 		embryo.fits[this_fit].LB_ynaught=embryo.F_ext*(embryo.pre.pre_ext-embryo.noise.noise)+embryo.noise.noise
