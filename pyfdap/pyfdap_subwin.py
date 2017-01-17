@@ -4899,13 +4899,25 @@ class csv_read_dialog(QtGui.QDialog):
 		self.default_delim=str(self.qle_delim.text())
 	
 	def set_ident(self):
-		self.default_ident=str(self.qle_ident.text())
+		self.default_ident=self.str2list(str(self.qle_ident.text()),str)
 		
 	def set_idx_pre(self):
-		self.default_idx_pre=str(self.qle_idx_pre.text())
+		
+		s=str(self.qle_idx_pre.text())
+		self.default_idx_pre=self.str2list(s,int)
+		
+	def str2list(self,s,dtype):
+			
+		s=s.replace("[","").replace("]","")
+		s=s.split(",")
+		l=[]
+		for x in s:
+			l.append(dtype(x))
+		
+		return l
 		
 	def set_noise(self):
-		self.default_noise=str(self.qle_noise.text())	
+		self.default_noise=float(str(self.qle_noise.text()))
 		
 	def check_insamecol(self,value):
 		self.default_insamecol=bool(int(value))
