@@ -49,7 +49,8 @@ import os, os.path
 import copy as cpy
 import functools
 import warnings
-
+import Tkinter
+import FileDialog
 
 #PyFDP Modules
 import pyfdap_img_module as pyfdap_img
