@@ -57,6 +57,7 @@ import pyfdap_misc_module as pyfdap_misc
 import pyfdap_stats_module as pyfdap_stats
 import pyfdap_fit_module as pyfdap_fit
 import pyfdap_subwin
+import pyfdap_plot_dialogs
 from pyfdap_term import *
 from embryo import *
 from molecule import *
@@ -88,7 +89,7 @@ class pyfdp(QtGui.QMainWindow):
 		self.setMinimumSize(400,300) 
 		self.resize(1500,1000)
 		self.dpi = 100
-		self.version="1.1.1"
+		self.version="1.1.2"
 		self.website="http://people.tuebingen.mpg.de/mueller-lab"
 		self.pyfdap_dir=os.getcwd()
 		self.ignWarnings=ignWarnings
@@ -157,6 +158,9 @@ class pyfdp(QtGui.QMainWindow):
 		
 		exportplot = QtGui.QAction('Export Plot', self)	
 		self.connect(exportplot, QtCore.SIGNAL('triggered()'), self.export_plot)
+		
+		editplot = QtGui.QAction('Edit current Plot', self)	
+		self.connect(editplot, QtCore.SIGNAL('triggered()'), self.edit_plot)
 		
 		exportplotseries = QtGui.QAction('Export Plot Series', self)	
 		self.connect(exportplotseries, QtCore.SIGNAL('triggered()'), self.export_plot_series)
@@ -444,6 +448,15 @@ class pyfdp(QtGui.QMainWindow):
 		shirapotest  = QtGui.QAction('Perform Shirapo test', self)
 		self.connect(shirapotest, QtCore.SIGNAL('triggered()'), self.perform_sharipo)
 		
+		compnormplot = QtGui.QAction('Plot normed average fit', self)
+		self.connect(compnormplot, QtCore.SIGNAL('triggered()'), self.compare_molecule_norm)
+		
+		compunpinplot = QtGui.QAction('Plot average fit', self)
+		self.connect(compunpinplot, QtCore.SIGNAL('triggered()'), self.compare_molecule_unpin)
+		
+		compbarks = QtGui.QAction('Plot ks by molecule', self)
+		self.connect(compbarks, QtCore.SIGNAL('triggered()'), self.compare_molecule_ks)
+		
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		#Help
 		#~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -464,6 +477,8 @@ class pyfdp(QtGui.QMainWindow):
 		self.edit_mb.addAction(copymolecule)
 		self.edit_mb.addAction(editmolecule)
 		self.edit_mb.addAction(removemolecule)
+		self.edit_plot_mb=self.edit_mb.addMenu('&Plotting')
+		self.edit_plot_mb.addAction(editplot)
 		self.edit_export_mb=self.edit_mb.addMenu('&Export')
 		self.edit_export_mb.addAction(exportplot)
 		self.edit_export_mb.addAction(exportplotseries)
@@ -573,15 +588,20 @@ class pyfdp(QtGui.QMainWindow):
 		self.stats_test_mb.addAction(mannwhitneytest)
 		self.stats_test_mb.addAction(shirapotest)
 		self.stats_plot_mb = self.stats_mb.addMenu('&Plotting')
-		self.stats_plot_mb.addAction(unpinplot)
-		self.stats_plot_mb.addAction(normplot)
-		self.stats_plot_mb.addAction(barks)
-		self.stats_plot_mb.addAction(bary0s)
-		self.stats_plot_mb.addAction(barc0s)
-		self.stats_plot_mb.addAction(barall)
-		self.stats_plot_mb.addAction(histk)
-		self.stats_plot_mb.addAction(histtaumin)
+		self.stats_plot_single_mb = self.stats_plot_mb.addMenu('&Single Molecule')
+		self.stats_plot_comp_mb = self.stats_plot_mb.addMenu('&Molecule comparison')
+		self.stats_plot_single_mb.addAction(unpinplot)
+		self.stats_plot_single_mb.addAction(normplot)
+		self.stats_plot_single_mb.addAction(barks)
+		self.stats_plot_single_mb.addAction(bary0s)
+		self.stats_plot_single_mb.addAction(barc0s)
+		self.stats_plot_single_mb.addAction(barall)
+		self.stats_plot_single_mb.addAction(histk)
+		self.stats_plot_single_mb.addAction(histtaumin)
 		
+		self.stats_plot_comp_mb.addAction(compnormplot)
+		self.stats_plot_comp_mb.addAction(compunpinplot)
+		self.stats_plot_comp_mb.addAction(compbarks)
 		
 		self.help_mb = self.menubar.addMenu('&Help')
 		self.help_mb.addAction(about)
@@ -2858,7 +2878,7 @@ class pyfdp(QtGui.QMainWindow):
 						tvec_data=embr.tvec_data
 						break
 					elif len(embr.tvec_data)>len(bkgd.bkgd_ext_vec):
-						tvec_data=embr.tvec_data[0:len(bkgd_ext_vec)]
+						tvec_data=embr.tvec_data[0:len(bkgd.bkgd_ext_vec)]
 				
 				#Plot
 				self.ax.plot(tvec_data,bkgd.bkgd_ext_vec,'-',color=c,label=bkgd.name)		
@@ -2897,7 +2917,7 @@ class pyfdp(QtGui.QMainWindow):
 						tvec_data=embr.tvec_data
 						break
 					elif len(embr.tvec_data)>len(bkgd.bkgd_slice_vec):
-						tvec_data=embr.tvec_data[0:len(bkgd_slice_vec)]
+						tvec_data=embr.tvec_data[0:len(bkgd.bkgd_slice_vec)]
 				
 				#Plot
 				self.ax.plot(tvec_data,bkgd.bkgd_slice_vec,'-',color=c,label=bkgd.name)		
@@ -2936,7 +2956,7 @@ class pyfdp(QtGui.QMainWindow):
 						tvec_data=embr.tvec_data
 						break
 					elif len(embr.tvec_data)>len(bkgd.bkgd_int_vec):
-						tvec_data=embr.tvec_data[0:len(bkgd_int_vec)]
+						tvec_data=embr.tvec_data[0:len(bkgd.bkgd_int_vec)]
 						
 				#Plot
 				self.ax.plot(tvec_data,bkgd.bkgd_int_vec,'-',color=c,label=bkgd.name)
@@ -3081,23 +3101,25 @@ class pyfdp(QtGui.QMainWindow):
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Create plot tab
 	
-	def create_plot_tab(self,plottype):
+	def create_plot_tab(self,plottype,tabname=None):
 		
-		if plottype in ["data","dataandbkgd"]:
-			tabname=self.curr_mol.name+"/"+self.curr_embr.name+"/"+plottype+"#1"
-		elif plottype=="fit":
-			tabname=self.curr_mol.name+"/"+self.curr_embr.name+"/"+self.curr_fit.name+"/"+plottype+"#1"
-		elif plottype in ["err","bar"]:
-			tabname=self.curr_mol.name+"/"+plottype+"#1"
+		if not isinstance(tabname,str):
+			
+			if plottype in ["data","dataandbkgd"]:
+				tabname=self.curr_mol.name+"/"+self.curr_embr.name+"/"+plottype+"#1"
+			elif plottype=="fit":
+				tabname=self.curr_mol.name+"/"+self.curr_embr.name+"/"+self.curr_fit.name+"/"+plottype+"#1"
+			elif plottype in ["err","bar"]:
+				tabname=self.curr_mol.name+"/"+plottype+"#1"
+			
+			else:
+				tabname="newtab#1"
 		
-		else:
-			tabname="newtab#1"
-
-		for i in range(self.plot_tabs.count()):
-			if self.plot_tabs.tabText(i)==tabname:
-				nme,nmbr=tabname.split("#")
-				nmbr=str(int(nmbr)+1)
-				tabname=nme+"#"+nmbr
+			for i in range(self.plot_tabs.count()):
+				if self.plot_tabs.tabText(i)==tabname:
+					nme,nmbr=tabname.split("#")
+					nmbr=str(int(nmbr)+1)
+					tabname=nme+"#"+nmbr
 		
 		self.curr_tab=QtGui.QWidget()	
 		self.plot_tabs.addTab(self.curr_tab,tabname)
@@ -3883,9 +3905,21 @@ class pyfdp(QtGui.QMainWindow):
 		else:
 			QtGui.QMessageBox.critical(None, "Error","No timeseries selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 			return
+		
+	#----------------------------------------------------------------------------------------------------------------------------------------
+	#Plot editing
 	
+	def edit_plot(self):
+		
+		if not hasattr(self,'ax'):
+			QtGui.QMessageBox.critical(None, "Error","No plot tab selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+			return
+		
+		pyfdap_plot_dialogs.modifyPlotDialog(self.ax,self).exec_()
+		
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Export Embryo object to csv file	
+	
 	
 	def export_embryo_csv(self):
 		
@@ -4010,20 +4044,22 @@ class pyfdp(QtGui.QMainWindow):
 	#----------------------------------------------------------------------------------------------------------------------------------------
 	#Statistics
 	
-	def sumup_molecule(self):
+	def sumup_molecule(self,mol=None):
 		
-		if self.curr_mol_node==None:
-			QtGui.QMessageBox.critical(None, "Error","No molecule selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
-			return
-	
-		if shape(self.curr_mol.embryos)[0]==0:
+		if mol==None:
+			if self.curr_mol_node==None:
+				QtGui.QMessageBox.critical(None, "Error","No molecule selected.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
+				return
+			mol=self.curr_mol
+		
+		if shape(mol.embryos)[0]==0:
 			QtGui.QMessageBox.critical(None, "Error","Molecule does not have any embryos to average.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
 			return
 		
 		#Open Bkgd dialog for bkgd data set
-		ret=pyfdap_subwin.select_fits(self.curr_mol,1,self).exec_()
+		ret=pyfdap_subwin.select_fits(mol,1,self).exec_()
 		
-		self.curr_mol.sumup_results()
+		mol.sumup_results()
 	
 	def plot_ks_by_fit(self):
 		
@@ -4164,8 +4200,6 @@ class pyfdp(QtGui.QMainWindow):
 		
 		self.create_plot_tab("bar")	
 		
-		
-		
 		if bin_vec==None:
 			n, bins, patches = self.ax.hist(parmvec, 10, histtype='bar',label=name)
 		else:
@@ -4173,301 +4207,85 @@ class pyfdp(QtGui.QMainWindow):
 		self.ax.set_xlabel(lbl_x)
 		self.ax.set_ylabel(lbl_y)
 		self.adjust_canvas()
-		
-	def norm_data_fit_plot3(self):
-		
-		#Get some fits and embryos if not already existent
-		if self.curr_mol.sel_fits==[]:
-			self.sumup_molecule()
-		
-		fits_norm=[]
-		datas_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		times=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		last_fit=self.curr_mol.sel_fits[0]
-		i=0
-
-		for fit in self.curr_mol.sel_fits:
-			#Check if all data sets have same frame rate
-			if fit.embryo.framerate!=last_fit.embryo.framerate:
-				QtGui.QMessageBox.critical(None, "Error","Embryos do not have the same frame rate.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
-				return
-			
-			if shape(fit.embryo.ignored)[0]>0:
-				fit=pyfdap_fit.interp_fit(fit)
-			
-			#Normalize everything between 0 and 1
-			if last_fit.fit_ext==1:
-				datas_norm[i,:]=(asarray(fit.embryo.ext_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
-			elif last_fit.fit_int==1:
-				datas_norm[i,:]=(asarray(fit.embryo.int_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt	
-			elif last_fit.fit_slice==1:
-				datas_norm[i,:]=(asarray(fit.embryo.slice_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
-				
-			if shape(fit.embryo.ignored)[0]>0:
-				fits_norm.append((asarray(fit.fit_av_int)-fit.ynaught_opt)/fit.cnaught_opt)
-			else:
-				fits_norm.append((asarray(fit.fit_av_d)-fit.ynaught_opt)/fit.cnaught_opt)
-			
-			times[i,:]=fit.embryo.tvec_data
-			
-			last_fit=fit
-			i=i+1
-				
-		#Compute av fit
-		fit_av=zeros(size(fits_norm[0]))
-		for fit in fits_norm:	
-			fit_av=fit_av+fit
-		fit_av=fit_av/float(shape(fits_norm)[0])	
-		
-		errors=[]
-		avgs=[]
-		errors_time=[]
-		avgs_time=[]
-		for i in range(last_fit.embryo.nframes):
-			errors.append(std(datas_norm[:,i]))
-			avgs.append(mean(datas_norm[:,i]))
-			errors_time.append(std(times[:,i]))
-			avgs_time.append(mean(times[:,i]))
-			
-		fit_av=exp(-self.curr_mol.k_av*asarray(avgs_time))	
-		
-		self.create_plot_tab("err")
-		
-		self.curr_mol.tvec_avg=avgs_time
-		self.curr_mol.tvec_errors=errors_time
-		self.curr_mol.fit_av=fit_av
-		self.curr_mol.data_av=avgs
-		self.curr_mol.data_errors=errors
-		
-		if last_fit.fit_ext==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='ro',label='data_av_ext')
-			self.ax.plot(avgs_time,fit_av,'r--',label='fit_av_ext')	
-		if last_fit.fit_int==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='bo',label='data_av_int')
-			self.ax.plot(avgs_time,fit_av,'b--',label='fit_av_int')
-		if last_fit.fit_slice==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='go',label='data_av_slice')
-			self.ax.plot(avgs_time,fit_av,'g--',label='fit_av_slice')
-		self.ax.autoscale(enable=True, axis='x', tight=True)
-		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
-		self.adjust_canvas()
 	
-	def norm_data_fit_plot2(self):
+	def bar_parm(self,parmvec,names=[],errs=[],lbl_y="",ax=None):
+		
+		if ax==None:
+			self.create_plot_tab("bar")	
+			ax=self.ax
+		
+		ind=arange(len(parmvec))
+		width=0.2
+		
+		errs=asarray(errs)
+		
+		ax.bar(ind-width,parmvec,width,yerr=errs,error_kw=dict(ecolor='k'))
+		
+		ax.set_xlim([min(ind)-0.5,max(ind)+0.5])
+		
+		ax.set_xticks(ind-0.5*width)
+		ax.set_xticklabels(names,rotation=90)
+		ax.set_ylabel(lbl_y)
+		self.adjust_canvas()
+				
+	def norm_data_fit_plot(self,ax=None,mol=None):
+		
+		if mol==None:
+			mol=self.curr_mol
 		
 		#Get some fits and embryos if not already existent
-		if self.curr_mol.sel_fits==[]:
-			self.sumup_molecule()
-			
-		datas_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		times=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		fits_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
+		if mol.sel_fits==[]:
+			self.sumup_molecule(mol=mol)
 		
-		for i,fit in enumerate(self.curr_mol.sel_fits):
-			
-			last_fit=fit
-			
-			#Normalize everything between 0 and 1
-			if last_fit.fit_ext==1:
-				#Put NaN in datavec and tvec if frame is ignored
-				ext_av_data_d=array(fit.embryo.ext_av_data_d)
-				ext_av_data_d[fit.embryo.ignored]=nan
-				datas_norm[i,:]=(asarray(ext_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
-				
-			elif last_fit.fit_int==1:
-				
-				#Put NaN in datavec and tvec if frame is ignored	
-				int_av_data_d=array(fit.embryo.int_av_data_d)
-				int_av_data_d[fit.embryo.ignored]=nan
-				datas_norm[i,:]=(asarray(int_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt
-				
-			elif last_fit.fit_slice==1:
-				#Put NaN in datavec and tvec if frame is ignored
-				slice_av_data_d=array(fit.embryo.slice_av_data_d)
-				slice_av_data_d[fit.embryo.ignored]=nan
-				datas_norm[i,:]=(asarray(slice_av_data_d)-fit.ynaught_opt)/fit.cnaught_opt	
-			
-			#Put nan in tvec
-			tvec_data=array(fit.embryo.tvec_data)
-			tvec_data[fit.embryo.ignored]=nan
-			
-			#Append times
-			times[i,:]=fit.embryo.tvec_data
-			
-			#Normalize fit
-			if shape(fit.embryo.ignored)[0]>0:
-				fit=pyfdap_fit.interp_fit(fit)
-				fits_norm[i,:]=(asarray(fit.fit_av_int)-fit.ynaught_opt)/fit.cnaught_opt
-			else:
-				fits_norm[i,:]=(asarray(fit.fit_av_d)-fit.ynaught_opt)/fit.cnaught_opt
-				
-			
-			
-		#Compute mean and std for errorbars
-		errors=[]
-		avgs=[]
-		errors_time=[]
-		avgs_time=[]
-		for i in range(last_fit.embryo.nframes):
-			errors.append(nanstd(datas_norm[:,i]))
-			avgs.append(nanmean(datas_norm[:,i]))
-			errors_time.append(nanstd(times[:,i]))
-			avgs_time.append(nanmean(times[:,i]))
+		#Bin data, pin data and fit
+		mol=pyfdap_fit.fit_binned_mol(mol,True,plot=False)
 		
-		#Compute final fit
-		#fit_av=exp(-self.curr_mol.k_av*asarray(avgs_time))
-		fit_av=nanmean(fits_norm,axis=0)
+		#Draw plot
+		self.error_bar_mol(mol=mol,ax=ax)
+	
+	def unpin_data_fit_plot(self,ax=None,mol=None):
 		
-		#Append everything to molecule for bookkeeping
-		self.curr_mol.tvec_avg=avgs_time
-		self.curr_mol.tvec_errors=errors_time
-		self.curr_mol.fit_av=fit_av
-		self.curr_mol.data_av=avgs
-		self.curr_mol.data_errors=errors
+		if mol==None:
+			mol=self.curr_mol
+		
+		#Get some fits and embryos if not already existent
+		if mol.sel_fits==[]:
+			self.sumup_molecule(mol=mol)
+		
+		#Bin data, pin data and fit
+		self.curr_mol=pyfdap_fit.fit_binned_mol(mol,False,plot=False)
+		
+		#Draw plot
+		self.error_bar_mol(mol=mol,ax=ax)
+	
+	def error_bar_mol(self,ax=None,mol=None):
 		
 		#Make plot tab
-		self.create_plot_tab("err")
+		if ax==None:
+			self.create_plot_tab("err")
+			ax=self.ax
+		
+		if mol==None:
+			mol=self.curr_mol
+			
+		last_fit=mol.sel_fits[0]
 		
 		#Finally plot
 		if last_fit.fit_ext==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='ro',label='data_av_ext')
-			self.ax.plot(avgs_time,fit_av,'r--',label='fit_av_ext')	
+			ax.errorbar(mol.tvec_avg,mol.data_av,xerr=mol.tvec_errors,yerr=mol.data_errors,fmt='ro',label='data_av_ext')
+			ax.plot(mol.tvec_avg,mol.fit_av,'k-',label='fit_av_ext')	
 		if last_fit.fit_int==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='bo',label='data_av_int')
-			self.ax.plot(avgs_time,fit_av,'b--',label='fit_av_int')
+			ax.errorbar(mol.tvec_avg,mol.data_av,xerr=mol.tvec_errors,yerr=mol.data_errors,fmt='bo',label='data_av_int')
+			ax.plot(mol.tvec_avg,mol.fit_av,'k-',label='fit_av_int')
 		if last_fit.fit_slice==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='go',label='data_av_slice')
-			self.ax.plot(avgs_time,fit_av,'g--',label='fit_av_slice')
-		self.ax.autoscale(enable=True, axis='x', tight=True)
-		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
+			ax.errorbar(mol.tvec_avg,mol.data_av,xerr=mol.tvec_errors,yerr=mol.data_errors,fmt='go',label='data_av_slice')
+			ax.plot(mol.tvec_avg,mol.fit_av,'k-',label='fit_av_slice')
+			
+		#ax.autoscale(enable=True, axis='x', tight=True)
+		ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
+		#ax.set_ylim([0,1.1])
+		ax.set_xlim(0,mol.tvec_avg[-1]+mol.embryos[0].framerate)
 		self.adjust_canvas()
-			
-	def norm_data_fit_plot(self):
-		
-		#Get some fits and embryos if not already existent
-		if self.curr_mol.sel_fits==[]:
-			self.sumup_molecule()
-		
-		#Bin data, pin data and fit
-		self.curr_mol=pyfdap_fit.fit_binned_mol(self.curr_mol,True,plot=False)
-		
-		#Draw plot
-		self.error_bar_mol()
-	
-	def unpin_data_fit_plot(self):
-		
-		#Get some fits and embryos if not already existent
-		if self.curr_mol.sel_fits==[]:
-			self.sumup_molecule()
-		
-		#Bin data, pin data and fit
-		self.curr_mol=pyfdap_fit.fit_binned_mol(self.curr_mol,False,plot=False)
-		
-		#Draw plot
-		self.error_bar_mol()
-	
-	def error_bar_mol(self):
-		
-		#Make plot tab
-		self.create_plot_tab("err")
-		
-		last_fit=self.curr_mol.sel_fits[0]
-		
-		#Finally plot
-		if last_fit.fit_ext==1:
-			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='ro',label='data_av_ext')
-			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_ext')	
-		if last_fit.fit_int==1:
-			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='bo',label='data_av_int')
-			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_int')
-		if last_fit.fit_slice==1:
-			self.ax.errorbar(self.curr_mol.tvec_avg,self.curr_mol.data_av,xerr=self.curr_mol.tvec_errors,yerr=self.curr_mol.data_errors,fmt='go',label='data_av_slice')
-			self.ax.plot(self.curr_mol.tvec_avg,self.curr_mol.fit_av,'k-',label='fit_av_slice')
-			
-		#self.ax.autoscale(enable=True, axis='x', tight=True)
-		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
-		#self.ax.set_ylim([0,1.1])
-		self.ax.set_xlim(0,self.curr_mol.tvec_avg[-1]+self.curr_mol.embryos[0].framerate)
-		self.adjust_canvas()
-		
-	def unpin_data_fit_plot2(self):
-		
-		#Get some fits and embryos if not already existent
-		if self.curr_mol.sel_fits==[]:
-			self.sumup_molecule()
-		
-		fits_norm=[]
-		datas_norm=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		times=zeros((shape(self.curr_mol.sel_fits)[0],self.curr_mol.sel_fits[0].embryo.nframes))
-		last_fit=self.curr_mol.sel_fits[0]
-		i=0
-		for fit in self.curr_mol.sel_fits:
-			#Check if all datasets have same frame rate and nframes
-			if fit.embryo.framerate!=last_fit.embryo.framerate:
-				QtGui.QMessageBox.critical(None, "Error","Embryos do not have the same frame rate.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
-				return
-			if fit.embryo.nframes!=last_fit.embryo.nframes:
-				QtGui.QMessageBox.critical(None, "Error","Embryos do not have the same number of frames.",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default)
-				return
-			
-			if shape(fit.embryo.ignored)[0]>0:
-				fit=pyfdap_fit.interp_fit(fit)
-			
-			#Normalize everything between 0 and 1
-			if last_fit.fit_ext==1:
-				datas_norm[i,:]=(asarray(fit.embryo.ext_av_data_d))
-			elif last_fit.fit_int==1:
-				datas_norm[i,:]=(asarray(fit.embryo.int_av_data_d))
-			elif last_fit.fit_slice==1:
-				datas_norm[i,:]=(asarray(fit.embryo.slice_av_data_d))
-					
-			if shape(fit.embryo.ignored)[0]>0:
-				fits_norm.append(asarray(fit.fit_av_int))
-			else:
-				fits_norm.append(asarray(fit.fit_av_d))
-			
-			times[i,:]=fit.embryo.tvec_data
-			
-			last_fit=fit
-			i=i+1
-			
-		#Compute av fit
-		fit_av=zeros(size(fits_norm[0]))
-		for fit in fits_norm:
-			fit_av=fit_av+fit
-		fit_av=fit_av/float(shape(fits_norm)[0])	
-		
-		errors=[]
-		avgs=[]
-		errors_time=[]
-		avgs_time=[]
-		for i in range(last_fit.embryo.nframes):
-			errors.append(std(datas_norm[:,i]))
-			avgs.append(mean(datas_norm[:,i]))
-			errors_time.append(std(times[:,i]))
-			avgs_time.append(mean(times[:,i]))
-		
-		self.curr_mol.tvec_avg=avgs_time
-		self.curr_mol.tvec_errors=errors_time
-		self.curr_mol.fit_av=fit_av
-		self.curr_mol.data_av=avgs
-		self.curr_mol.data_errors=errors
-		
-		self.create_plot_tab("err")
-		
-		if last_fit.fit_ext==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='ro',label='data_av_ext')
-			self.ax.plot(avgs_time,fit_av,'r--',label='fit_av_ext')
-		if last_fit.fit_int==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='bo',label='data_av_int')
-			self.ax.plot(avgs_time,fit_av,'b--',label='fit_av_int')
-		if last_fit.fit_slice==1:
-			self.ax.errorbar(avgs_time,avgs,xerr=errors_time,yerr=errors,fmt='go',label='data_av_slice')
-			self.ax.plot(avgs_time,fit_av,'g--',label='fit_av_slice')
-		
-		self.ax.autoscale(enable=True, axis='x', tight=True)
-		
-		self.ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)		
-		self.adjust_canvas()	
 	
 	def sel_molecules(self):
 		
@@ -4527,7 +4345,41 @@ class pyfdp(QtGui.QMainWindow):
 	def perform_sharipo(self):
 		
 		pyfdap_stats.sharipo_test(self.curr_mol.get_kopts())
+	
+	def compare_molecule_unpin(self):
+		
+		selected=self.sel_molecules()
+		
+		self.create_plot_tab("err",tabname="Molecule Comparison")
+		
+		for mol in selected:
+			self.unpin_data_fit_plot(ax=self.ax,mol=mol)	
 			
+	def compare_molecule_norm(self):
+		
+		selected=self.sel_molecules()
+		
+		self.create_plot_tab("err",tabname="Molecule Comparison")
+		
+		for mol in selected:
+			self.norm_data_fit_plot(ax=self.ax,mol=mol)	
+				
+	def compare_molecule_ks(self):
+		
+		selected=self.sel_molecules()
+		
+		self.create_plot_tab("bar",tabname="ks Comparison")
+		
+		ks=[]
+		errs=[]
+		names=[]
+		for mol in selected:
+			ks.append(mol.k_av)
+			errs.append(mol.k_std)
+			names.append(mol.name)
+			
+		self.bar_parm(ks,names=names,errs=errs,lbl_y="Decay rate (1/s)",ax=self.ax)	
+	
 #-------------------------------------------------------------------------------------------------------------------------------------
 #Main
 			

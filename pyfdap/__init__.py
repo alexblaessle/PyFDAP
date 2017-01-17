@@ -24,6 +24,7 @@ from . import molecule
 from . import useful_fcts
 
 from . import pyfdap_app
+from . import pyfdap_plot_dialogs
 
 __version__ = '1.1.1'
 __author__ = u"Alexander Blaessle"
