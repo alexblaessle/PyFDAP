@@ -4193,6 +4193,8 @@ class pyfdp(QtGui.QMainWindow):
 		minbin=min(hs)-mod(min(hs),self.bin_width_halfilfe_min)
 		maxbin=max(hs)+mod(max(hs),self.bin_width_halfilfe_min)
 		
+		print minbin,maxbin
+		
 		bins=arange(minbin-self.bin_width_halfilfe_min,maxbin+self.bin_width_halfilfe_min,self.bin_width_halfilfe_min)
 		
 		self.hist_parm(hs,'halflife_min',lbl_x="halflife (min)",bin_vec=bins)	

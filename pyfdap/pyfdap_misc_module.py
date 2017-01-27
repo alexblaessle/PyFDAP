@@ -495,7 +495,7 @@ def gen_embryos_from_csv(fn,ident=["time,ext","int","slice","pre_ext","pre_int",
 		if ident[1] in header[i]:
 			
 			j=j+1		
-			emb=embryo("genFromCSV"+str(j),"fdap")
+			emb=embryo.embryo("genFromCSV"+str(j),"fdap")
 			
 			#Set noise value
 			emb.noise.noise=noiseVal
@@ -685,18 +685,18 @@ def gen_bkgds_from_csv(fn,mol,ident=["time,ext","int","slice","pre_ext","pre_int
 					print "Warning, cannot set timeseries with header" + header[i] + " . Embryo does not have timeseries."
 		
 		# Check for ignored timepoints
-		vecs=[bkgd.ext_vec,bkgd.int_vec,bkgd.slice_vec]
-		lens=[len(bkgd.ext_vec),len(bkgd.int_vec),len(bkgd.slice_vec)]
+		vecs=[bkgd.bkgd_ext_vec,bkgd.bkgd_int_vec,bkgd.bkgd_slice_vec]
+		lens=[len(bkgd.bkgd_ext_vec),len(bkgd.bkgd_int_vec),len(bkgd.bkgd_slice_vec)]
 		
-		bkgd.ignored=where(isnan(bkgd.ext_vec))[0]
-		bkgd.ext_av_data_ign=delete(bkgd.ext_vec,bkgd.ignored)	
-		bkgd.int_av_data_ign=delete(bkgd.int_vec,bkgd.ignored)	
-		bkgd.slice_av_data_ign=delete(bkgd.slice_vec,bkgd.ignored)	
+		bkgd.ignored=where(isnan(bkgd.bkgd_ext_vec))[0]
+		bkgd.ext_av_data_ign=delete(bkgd.bkgd_ext_vec,bkgd.ignored)	
+		bkgd.int_av_data_ign=delete(bkgd.bkgd_int_vec,bkgd.ignored)	
+		bkgd.slice_av_data_ign=delete(bkgd.bkgd_slice_vec,bkgd.ignored)	
 		
 		# Add some dummy values in centers and radiuses list 
 		# (some functions in GUI use it to generate some stuff, so there better be something in)
-		bkgd.centers_embr_px=len(bkgd.ext_vec)*[[256,256]]
-		bkgd.radiuses_embr_px=len(bkgd.ext_vec)*[300]
+		bkgd.centers_embr_px=len(bkgd.bkgd_ext_vec)*[[256,256]]
+		bkgd.radiuses_embr_px=len(bkgd.bkgd_ext_vec)*[300]
 		
 		bkgds.append(bkgd)
 		

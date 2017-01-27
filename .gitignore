@@ -23,6 +23,9 @@ pyfdap/build/
 pyfdap/dist/
 pyfdap/logo/
 
+#Don't push some scripts in main folder
+pyfdap/make_pub_figures.py
+
 #Don't push html version of Doc
 Doc/html*
 
